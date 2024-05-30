@@ -5,7 +5,7 @@ const db = new Sybase('localhost', 2638, 'Datos5', 'dba', 'ALFA2018');
 const cors = require('cors')
 const server = express()
 require('dotenv').config()
-const port = process.env.port || 1000 
+const PORT = process.env.PORT || 1000 
 server.use(bodyParser.json({limit: "50mb"}));
 server.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 server.use(cors());
@@ -64,5 +64,5 @@ server.use(require('../src/rutas/pagos/pagos'));
 
 
 
-server.listen(port)
-console.log('Servidor corriendo por el puerto ',port)
+server.listen(PORT)
+console.log('Servidor corriendo por el puerto ',PORT)
