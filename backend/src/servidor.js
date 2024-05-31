@@ -1,7 +1,5 @@
 const express = require('express')
 const bodyParser = require('body-parser');
-const Sybase = require('sybase');
-const db = new Sybase('localhost', 2638, 'Datos5', 'dba', 'ALFA2018');
 const cors = require('cors')
 const server = express()
 require('dotenv').config()
@@ -25,10 +23,6 @@ server.use(require('../src/rutas/informacion'))
 server.use(require('../src/rutas/registro/empresa'))
 //inicio de sesion
 server.use(require('../src/rutas/login/empresa'))
-//reporte para empresas
-server.use(require('../src/rutas/reportes/empresa'))
-//recurso para los reportes
-server.use(require('../src/rutas/reportes/recurso'))
 //planes
 server.use(require('../src/rutas/plan/plan'))
 //tecnicos
