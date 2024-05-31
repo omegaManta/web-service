@@ -9,6 +9,9 @@ server.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:
 server.use(cors());
 
 
+server.get('/', (req, res) => {
+    res.send('Bienvenido a mi servidor!!!!');
+  });
 
 
 //usuarios
