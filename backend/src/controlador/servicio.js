@@ -54,7 +54,7 @@ res.status(200).json(respuesta.rows);
 }
 
 const verinicial = async(req,res)=>{
-    res.send('Bienvenido a mi servidor en la nube AMBAR')
+    res.send('Bienvenido a mi servidor en la nube')
     }
 
 
