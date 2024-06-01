@@ -10,7 +10,7 @@ const upload = multer({dest: 'uploads'})
 const crearCuenta = async (req, res) => {
   try {
     const result = await cloudinary.uploader.upload(req.file.path, {
-      resource_type: 'auto',
+      resource_type: 'image',
       folder: 'contrato-firmados',
     });
     const pdfUrl = result.secure_url;
