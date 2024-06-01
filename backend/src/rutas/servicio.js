@@ -1,5 +1,5 @@
 const {buscarServicio,verServicios,crearservicio,verservicio,
-    editarServicio,eliminarservicio,
+    editarServicio,eliminarservicio,verinicial,
 crearcategoria,vercategorias,vercategoria,editarcategoria,
 eliminarcategoria,detalleservicio,muestracategoria,contarservicios
 } = require('../controlador/servicio')
@@ -17,6 +17,7 @@ router.get('/serviciobyid/:idservicio',verservicio)
 router.get('/detalle-servicio/:idservicio',detalleservicio)
 router.get('/detalle-categoria/:idcategoria',muestracategoria)
 router.get('/conteo-servicio',contarservicios);
+router.get('/',verinicial);
 
 
 

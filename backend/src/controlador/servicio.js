@@ -53,6 +53,10 @@ const respuesta = await pool.query('select s.idservicio,s.idcategoria, s.descrip
 res.status(200).json(respuesta.rows);
 }
 
+const verinicial = async(req,res)=>{
+    res.send('Bienvenido a mi servidor en la nube')
+    }
+
 
 const verservicio = async(req,res)=>{
 const idservicio = req.params.idservicio
@@ -184,5 +188,6 @@ module.exports = {
     editarServicio,
     eliminarservicio,
     detalleservicio,
-    contarservicios
+    contarservicios,
+    verinicial
 }
