@@ -25,7 +25,6 @@ const crearcomprobante = async(req,res) => {
 
 const vercomprobantecliente = async(req,res)=>{
     const token = req.headers.authorization;
-    const idempresa = req.params.idempresa;
     
     if (!token) {
       res.status(401).json({ error: 'Token no proporcionado' });
