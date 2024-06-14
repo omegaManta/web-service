@@ -276,7 +276,7 @@ const crearnotificacionpedido = async(req,res)=>{
 
 const crearnotificacioncompletado = async(req,res)=>{
 
-  const {nombre_empresa,ruc} = req.body;
+  const {email,nombre_empresa,ruc} = req.body;
   const dominio = 'https://factura.omegas-apps.com/panel/servicio-realizados'
 
 
@@ -311,7 +311,7 @@ const crearnotificacioncompletado = async(req,res)=>{
   // Configuración del correo electrónico
   const mailOptions = {
     from: 'notificaciones@omegas-apps.com',
-    to:  'omega_manta@hotmail.com',
+    to:  email,
     subject: 'Recibo generado para el cliente '+nombre_empresa+ ' con ruc '+ruc,
     html: `
     <!DOCTYPE html>
