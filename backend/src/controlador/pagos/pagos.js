@@ -51,10 +51,19 @@ const vercomprobantecliente = async(req,res)=>{
     }
   }
 
-
+const eliminarcomprobante = async(req,res) => {
+    idcomprobante = req.params.idcomprobante;
+    const eliminar = await pool.query('delete from comprobante where idcomprobante = $1',[
+        idcomprobante
+    ])
+    res.json({
+        message: 'Comprobante eliminado'
+    })
+}
 
 
 module.exports = {
     crearcomprobante,
-    vercomprobantecliente
+    vercomprobantecliente,
+    eliminarcomprobante
 }
