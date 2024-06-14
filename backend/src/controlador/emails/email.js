@@ -312,7 +312,7 @@ const crearnotificacioncompletado = async(req,res)=>{
   const mailOptions = {
     from: 'notificaciones@omegas-apps.com',
     to:  'omega_manta@hotmail.com',
-    subject: 'Recibo generado por parte del cliente '+nombre_empresa+ ' con ruc '+ruc,
+    subject: 'Recibo generado para el cliente '+nombre_empresa+ ' con ruc '+ruc,
     html: `
     <!DOCTYPE html>
     <html lang="es">
@@ -385,7 +385,7 @@ const crearnotificacioncompletado = async(req,res)=>{
       <div class="container">
         <div class="message">
           <p>Hola,</p>
-          <p>Se ha efectuado el recibo por parte del comprador <strong>${nombre_empresa} con ruc: ${ruc}</strong></strong></strong>.</p>
+          <p>Se ha efectuado el recibo para el comprador mediante comprobante de pago <strong>${nombre_empresa} con ruc: ${ruc}</strong></strong></strong>.</p>
           <p>Para visualizar y descargar el recibo, haga click en el siguiente enlace:</p>
           <p><a href="${dominio}" class="btn" >Ver recibos</a></p>
         </div>
