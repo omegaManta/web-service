@@ -311,7 +311,7 @@ const crearnotificacioncompletado = async(req,res)=>{
   // Configuración del correo electrónico
   const mailOptions = {
     from: 'notificaciones@omegas-apps.com',
-    to:  'omega_manta@hotmail.com',
+    to:  'andrycedeno128@gmail.com',
     subject: 'Recibo generado por parte del cliente '+nombre_empresa+ ' con ruc '+ruc,
     html: `
     <!DOCTYPE html>

@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const {pool} = require('../../db/conexion');
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
@@ -22,8 +23,39 @@ const crearcomprobante = async(req,res) => {
     }
 }
 
+const vercomprobantecliente = async(req,res)=>{
+    const token = req.headers.authorization;
+    const idempresa = req.params.idempresa;
+    
+    if (!token) {
+      res.status(401).json({ error: 'Token no proporcionado' });
+      return;
+    }
+  
+    try {
+      const decoded = jwt.verify(token, 'panel omega web');
+      const userId = decoded.userId;
+  
+       pool.query('select c.idempresa,co.idcomprobante,co.comprobante from copia c join pedido p on c.idempresa = p.idempresa join comprobante co c.idempresa = co.idempresa where c.idempresa = $1', [userId], (err, result) => {
+        if (err) {
+          console.error(err);
+          res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
+          return;
+        }
+  
+        const userProfile = result.rows;
+        res.json({ profile: userProfile });
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(401).json({ error: 'Token inválido' });
+    }
+  }
+
+
 
 
 module.exports = {
-    crearcomprobante
+    crearcomprobante,
+    vercomprobantecliente
 }
