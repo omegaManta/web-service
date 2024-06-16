@@ -35,7 +35,7 @@ const vercomprobantecliente = async(req,res)=>{
       const decoded = jwt.verify(token, 'panel omega web');
       const userId = decoded.userId;
   
-       pool.query('select c.idempresa,co.idcomprobante,co.comprobante from copia c join pedido p on c.idempresa = p.idempresa join comprobante co on c.idempresa = co.idempresa where c.idempresa = $1', [userId], (err, result) => {
+       pool.query('select c.idempresa,co.idcomprobante,co.comprobante from copia c join pedido p on c.idempresa = p.idempresa join comprobante co on c.idempresa = co.idempresa where c.idempresa = $1 order by co.fecha_creacion desc limit 1', [userId], (err, result) => {
         if (err) {
           console.error(err);
           res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
