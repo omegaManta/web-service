@@ -386,7 +386,7 @@ const crearnotificacioncompletado = async(req,res)=>{
         <div class="message">
           <p>Hola,</p>
           <p>Se ha efectuado el recibo para el comprador mediante comprobante de pago <strong>${nombre_empresa} con ruc: ${ruc}</strong></strong></strong>.</p>
-          <p>Por favor revise su perfil en la aplicacion web para visualizar su recibo</p>
+          <p>Por favor revise su perfil en la aplicacion web para descargar su recibo</p>
         </div>
       </div>
     </body>
