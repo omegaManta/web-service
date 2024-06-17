@@ -274,10 +274,10 @@ const crearnotificacionpedido = async(req,res)=>{
 }
 
 
+//Comprobante aceptado
 const crearnotificacioncompletado = async(req,res)=>{
 
   const {email,nombre_empresa,ruc} = req.body;
-  const dominio = 'https://factura.omegas-apps.com/panel/servicio-realizados'
 
 
   
@@ -386,8 +386,7 @@ const crearnotificacioncompletado = async(req,res)=>{
         <div class="message">
           <p>Hola,</p>
           <p>Se ha efectuado el recibo para el comprador mediante comprobante de pago <strong>${nombre_empresa} con ruc: ${ruc}</strong></strong></strong>.</p>
-          <p>Para visualizar y descargar el recibo, haga click en el siguiente enlace:</p>
-          <p><a href="${dominio}" class="btn" >Ver recibos</a></p>
+          <p>Por favor revise su perfil en la tienda para visualizar su recibo</p>
         </div>
       </div>
     </body>
@@ -409,6 +408,145 @@ const crearnotificacioncompletado = async(req,res)=>{
   });
 
 }
+
+
+//Comprobante rechazado
+const crearnotificacionrechazado = async(req,res)=>{
+
+  const {email,nombre_empresa,ruc} = req.body;
+
+
+  
+  // Configuración del transporte para NodeMailer (Hotmail/Outlook)
+  const transporter = nodemailer.createTransport({
+    host: "mail.omegas-apps.com",
+    pool: true,
+    secure: false,
+    port: 587,
+    auth: {
+      user: "notificaciones@omegas-apps.com",
+      pass: "N0t1f1c@c10nes*2024"
+    },
+    tls: {
+      rejectUnauthorized: false
+    },
+    debug: true,
+    maxConnections: 100,
+    maxMessages: 100,
+    authMethod: 'LOGIN',
+    requireTLS: true,
+    // no not send more than 5 messages in a second
+    rateLimit: 1
+    // service: 'hotmail',
+    // auth: {
+    //   user: 'omega_manta@hotmail.com',
+    //   pass: 'bebe2013',
+    // },
+  });
+
+  // Configuración del correo electrónico
+  const mailOptions = {
+    from: 'notificaciones@omegas-apps.com',
+    to:  email,
+    subject: 'Recibo generado para el cliente '+nombre_empresa+ ' con ruc '+ruc,
+    html: `
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Pedido Realizado</title>
+      <style>
+        /* Estilos CSS aquí */
+    
+        /* Reset de estilos */
+        body, h1, h2, h3, h4, h5, h6, p, a, img, div {
+          margin: 0;
+          padding: 0;
+          border: 0;
+          font-family: Arial, sans-serif;
+          box-sizing: border-box;
+        }
+    
+        /* Contenedor principal */
+        .container {
+          max-width: 600px;
+          margin: 0 auto;
+          padding: 20px;
+          background-color: #ffffff;
+          border-radius: 10px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    
+        /* Logo */
+        .logo img {
+          max-width: 200px;
+          height: auto;
+          display: block;
+          margin: 0 auto;
+        }
+    
+        /* Mensaje */
+        .message {
+          text-align: center;
+          margin-top: 20px;
+        }
+    
+        .message p {
+          font-size: 16px;
+          line-height: 1.5;
+          margin-bottom: 15px;
+        }
+    
+        .message strong {
+          color: #007bff;
+        }
+    
+        .btn {
+          display: inline-block;
+          padding: 10px 20px;
+          background-color: #007bff;
+          color: #ffffff;
+          text-decoration: none;
+          border-radius: 5px;
+        }
+    
+        .btn:hover {
+          background-color: #0056b3;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="message">
+          <p>Hola,</p>
+          <p>Se ha rechazo el recibo para el comprador mediante comprobante de pago <strong>${nombre_empresa} con ruc: ${ruc}</strong></strong></strong>.</p>
+          <p>Por favor suba nuevamente su comprobante de pago</p>
+        </div>
+      </div>
+    </body>
+    </html>
+    `,
+  };
+
+ 
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Error al enviar el correo:', error);
+      res.status(500).json({ error: 'Error al enviar el correo' });
+    } else {
+      console.log('Correo enviado con éxito:', info.response);
+
+      // Responder al cliente que todo fue exitoso
+      res.status(200).json({ success: true });
+    }
+  });
+
+}
+
+
+
 
 
 
@@ -555,5 +693,6 @@ const crearnotificacionvisita = async(req,res)=>{
         crearnotificacionpedido,
         crearnotificacioncompletado,
         crearnotificacionobservacion,
-        crearnotificacionvisita
+        crearnotificacionvisita,
+        crearnotificacionrechazado
     }
