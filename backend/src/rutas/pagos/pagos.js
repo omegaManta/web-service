@@ -5,7 +5,7 @@ const multer = require('multer');
 const upload = multer({ dest: 'uploads' });
 
 router.post('/crear-comprobante',upload.single('pago'),crearcomprobante);
-router.get('/ver-comprobante',vercomprobantecliente);
+router.get('/ver-comprobante/:idempresa',vercomprobantecliente);
 router.delete('/comprobante/:idempresa',eliminarcomprobante);
 
 module.exports = router;

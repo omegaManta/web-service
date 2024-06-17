@@ -24,31 +24,11 @@ const crearcomprobante = async(req,res) => {
 }
 
 const vercomprobantecliente = async(req,res)=>{
-    const token = req.headers.authorization;
-    
-    if (!token) {
-      res.status(401).json({ error: 'Token no proporcionado' });
-      return;
-    }
-  
-    try {
-      const decoded = jwt.verify(token, 'panel omega web');
-      const userId = decoded.userId;
-  
-       pool.query('select c.idempresa,co.idcomprobante,co.comprobante from copia c join pedido p on c.idempresa = p.idempresa join comprobante co on c.idempresa = co.idempresa where c.idempresa = $1 order by co.fecha_creacion desc limit 1', [userId], (err, result) => {
-        if (err) {
-          console.error(err);
-          res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
-          return;
-        }
-  
-        const userProfile = result.rows;
-        res.json({ profile: userProfile });
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(401).json({ error: 'Token inválido' });
-    }
+    idempresa = req.params.idempresa;
+    const response = await pool.query('select c.idempresa,co.idcomprobante,co.comprobante from copia c join pedido p on c.idempresa = p.idempresa join comprobante co on c.idempresa = co.idempresa where c.idempresa = $1 order by co.fecha_creacion desc limit 1',[
+      idempresa
+    ])
+   res.status(200).json(response.rows);
   }
 
 const eliminarcomprobante = async(req,res) => {
