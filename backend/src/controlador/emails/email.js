@@ -386,7 +386,7 @@ const crearnotificacioncompletado = async(req,res)=>{
         <div class="message">
           <p>Hola,</p>
           <p>Se ha efectuado el recibo para el comprador mediante comprobante de pago <strong>${nombre_empresa} con ruc: ${ruc}</strong></strong></strong>.</p>
-          <p>Por favor revise su perfil en la tienda para visualizar su recibo</p>
+          <p>Por favor revise su perfil en la aplicacion web para visualizar su recibo</p>
         </div>
       </div>
     </body>
@@ -522,7 +522,7 @@ const crearnotificacionrechazado = async(req,res)=>{
         <div class="message">
           <p>Hola,</p>
           <p>Se ha rechazo el recibo para el comprador mediante comprobante de pago <strong>${nombre_empresa} con ruc: ${ruc}</strong></strong></strong>.</p>
-          <p>Por favor suba nuevamente su comprobante de pago</p>
+          <p>Por favor suba nuevamente su comprobante de pago en la aplicacion web</p>
         </div>
       </div>
     </body>
