@@ -550,7 +550,7 @@ const crearnotificacionrechazado = async(req,res)=>{
 //Aviso de comprobante
 const crearnotificacionaviso = async(req,res)=>{
 
-  const {nombre_empresa,ruc} = req.body;
+  const {nombre_empresa,ruc,total} = req.body;
 
 
   
@@ -659,7 +659,7 @@ const crearnotificacionaviso = async(req,res)=>{
         <div class="message">
           <p>Hola,</p>
           <p>Se ha subido un comprobante de pago del cliente <strong>${nombre_empresa} con ruc: ${ruc}</strong></strong></strong>.</p>
-          <p>Por favor revise la aplicacion web de panel para verificar su validez</p>
+          <p>Con un total depositado de ${total}. Por favor revise la aplicacion web de panel para verificar su validez</p>
         </div>
       </div>
     </body>
