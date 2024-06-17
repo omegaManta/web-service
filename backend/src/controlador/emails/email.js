@@ -448,7 +448,7 @@ const crearnotificacionrechazado = async(req,res)=>{
   const mailOptions = {
     from: 'notificaciones@omegas-apps.com',
     to:  email,
-    subject: 'Recibo generado para el cliente '+nombre_empresa+ ' con ruc '+ruc,
+    subject: 'Recibo no generado para el cliente '+nombre_empresa+ ' con ruc '+ruc,
     html: `
     <!DOCTYPE html>
     <html lang="es">
