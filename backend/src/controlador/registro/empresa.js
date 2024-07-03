@@ -102,28 +102,76 @@ res.status(200).json(respuesta.rows);
 
 
 const crearSolicitud = async(req,res)=>{
-    const {ruc,email,telefono,
-    direccion,
-    nombre_empresa,
-    contacto,
-    fecha_ingreso,
-    ciudad,
-    password,
-    idplan,contrato
-    } = req.body;
+  const {ruc,email,telefono,
+  direccion,
+  nombre_empresa,
+  contacto,
+  fecha_ingreso,
+  ciudad,
+  password,
+  idplan,contrato
+  } = req.body;
+const dominio = 'https://e-commerce-mjyp3g1li-adriano-parrales-projects.vercel.app/'
 
-        // Guardar la empresa en la base de datos
-        const guarda = pool.query(
-          'INSERT INTO copia(ruc, email, telefono, direccion, nombre_empresa, contacto,fecha_ingreso, ciudad, password, idplan, contrato) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,$11)',
-          [ruc, email, telefono, direccion, nombre_empresa, contacto,fecha_ingreso, ciudad, password, idplan, contrato]
-        );
-
-        // Responder al cliente que todo fue exitoso
-        res.status(200).json({ success: true });
-
-    
   
+  // Configuración del transporte para NodeMailer (Hotmail/Outlook)
+  const transporter = nodemailer.createTransport({
+    host: "mail.omegas-apps.com",
+    pool: true,
+    secure: false,
+    port: 587,
+    auth: {
+      user: "notificaciones@omegas-apps.com",
+      pass: "N0t1f1c@c10nes*2024"
+    },
+    tls: {
+      rejectUnauthorized: false
+    },
+    debug: true,
+    maxConnections: 100,
+    maxMessages: 100,
+    authMethod: 'LOGIN',
+    requireTLS: true,
+    // no not send more than 5 messages in a second
+    rateLimit: 1
+    // service: 'hotmail',
+    // auth: {
+    //   user: 'omega_manta@hotmail.com',
+    //   pass: 'bebe2013',
+    // },
+  });
+
+  // Configuración del correo electrónico
+  const mailOptions = {
+    from: 'notificaciones@omegas-apps.com',
+    to: email,
+    subject: 'Cliente '+nombre_empresa+ ' aceptado',
+    text: 'Gracias por preferirnos....... puede iniciar sesion al siguiente link: '
+    +dominio,
+  };
+
+ 
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Error al enviar el correo:', error);
+      res.status(500).json({ error: 'Error al enviar el correo' });
+    } else {
+      console.log('Correo enviado con éxito:', info.response);
+
+      // Guardar la empresa en la base de datos
+      const guarda = pool.query(
+        'INSERT INTO copia(ruc, email, telefono, direccion, nombre_empresa, contacto,fecha_ingreso, ciudad, password, idplan, contrato) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,$11)',
+        [ruc, email, telefono, direccion, nombre_empresa, contacto,fecha_ingreso, ciudad, password, idplan, contrato]
+      );
+
+      // Responder al cliente que todo fue exitoso
+      res.status(200).json({ success: true });
     }
+  });
+  
+
+  }
+
 
 
 
