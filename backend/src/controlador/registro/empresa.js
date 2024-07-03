@@ -10,24 +10,78 @@ const upload = multer({dest: 'uploads'})
 const crearCuenta = async (req, res) => {
   try {
     const result = await cloudinary.uploader.upload(req.file.path, {
-      resource_type: 'image',
       folder: 'contrato-firmados',
     });
     const pdfUrl = result.secure_url;
+
     const { ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idplan } = req.body;
+
+    const dominio = 'https://factura.omegas-apps.com/panel/welcome/autorizar'
+    
+    // Configuración del transporte para NodeMailer (Hotmail/Outlook)
+    const transporter = nodemailer.createTransport({
+      host: "mail.omegas-apps.com",
+      pool: true,
+      secure: false,
+      port: 587,
+      auth: {
+        user: "notificaciones@omegas-apps.com",
+        pass: "N0t1f1c@c10nes*2024"
+      },
+      tls: {
+        rejectUnauthorized: false
+      },
+      debug: true,
+      maxConnections: 100,
+      maxMessages: 100,
+      authMethod: 'LOGIN',
+      requireTLS: true,
+      // no not send more than 5 messages in a second
+      rateLimit: 1
+      // service: 'hotmail',
+      // auth: {
+      //   user: 'omega_manta@hotmail.com',
+      //   pass: 'bebe2013',
+      // },
+    });
+
+    // Configuración del correo electrónico
+    const mailOptions = {
+      from: 'notificaciones@omegas-apps.com',
+      to: 'omega_manta@hotmail.com',
+      subject: 'Cliente por aceptar '+nombre_empresa+ ' con ruc ' +ruc,
+      html:
+       ' Para cuestiones de cumplimiento normativo de la empresa se adjunta el contrato del cliente con intencion de suscribirse' 
+       +'<br/> <a src="cid:pdf"></a> <br/>'
+       +'Por favor vaya al panel para aceptar la empresa ',
+    attachments: [
+    {
+      filename: 'contrato.pdf',
+      path: pdfUrl,
+      cid: 'pdf'
+    }
+  ]
+    };
+
+   
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Error al enviar el correo:', error);
+        res.status(500).json({ error: 'Error al enviar el correo' });
+      } else {
+        console.log('Correo enviado con éxito:', info.response);
+
         // Guardar la empresa en la base de datos
-        try {
-          await pool.query(
-            'INSERT INTO empresa (ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idplan, contrato) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
-            [ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idplan, pdfUrl]
-          );
-          res.status(200).json({ success: true });
-        } catch (error) {
-          console.error('Error al guardar la empresa en la base de datos:', error);
-          res.status(500).json({ error: 'Error al guardar la empresa en la base de datos' });
-        }
+        const guarda = pool.query(
+          'INSERT INTO empresa (ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idplan, contrato) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
+          [ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idplan, pdfUrl]
+        );
+
+        // Responder al cliente que todo fue exitoso
+        res.status(200).json({ success: true });
       }
-   catch (error) {
+    });
+  } catch (error) {
     console.error('Error en la función crearCuenta:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
