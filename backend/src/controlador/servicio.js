@@ -7,15 +7,10 @@ const upload = multer({ dest: 'uploads' });
 //servicios
 const crearservicio = async(req,res)=>{
     try {
-        const result = await cloudinary.uploader.upload(req.file.path,{
-            folder: 'Servicios'
-        })
-        const imageUrl = result.secure_url;
         const {idcategoria,descripcion,precio,duracion
         } = req.body;
-        const guardar = await pool.query('insert into servicio(idcategoria,foto_url,descripcion,precio,duracion)values($1,$2,$3,$4,$5)',[
+        const guardar = await pool.query('insert into servicio(idcategoria,descripcion,precio,duracion)values($1,$2,$3,$4)',[
             idcategoria,
-            imageUrl,
             descripcion,
             precio,
             duracion
@@ -25,13 +20,31 @@ const crearservicio = async(req,res)=>{
       console.error(error);
       res.status(400).send(error.message);
     }
+}
 
+//imagen para cada servicio
+const imgservicio = async(req,res) => {
+    try {
+        const result = await cloudinary.uploader.upload(req.file.path,{
+            folder: 'imagenes-servicios',
+        })
+        const fotoUrl = result.secure_url;
+        const {idservicio} = req.body;
+        const guardar = await pool.query('insert into imgservicio(idservicio,img)values($1,$2)',[
+            idservicio,
+            fotoUrl
+        ])
+        res.status(200).json(result)
+    } catch (error) {
+      console.error(error);
+      res.status(400).send(error.message);
+    }
 }
 
 
 const buscarServicio= async(req,res)=>{
 const descripcion = req.params.descripcion;
-const respuesta = await pool.query('select c.descripcion as categoriadescripcion,s.idservicio, s.descripcion,s.precio,s.duracion,s.foto_url from servicio s join categoria c on c.idcategoria = s.idcategoria where s.descripcion like $1',[
+const respuesta = await pool.query('select c.descripcion as categoriadescripcion,s.idservicio, s.descripcion,s.precio,s.duracion,i.img from servicio s join categoria c on c.idcategoria = s.idcategoria join imgservicio i on s.idservicio = i.idservicio where s.descripcion like $1 order by i.fecha_hora desc limit 1',[
     descripcion + '%'
 ])
 res.status(200).json(respuesta.rows);
@@ -41,7 +54,7 @@ res.status(200).json(respuesta.rows);
 
 const detalleservicio = async(req,res)=>{
     const idservicio = req.params.idservicio;
-    const respuesta = await pool.query('select c.idcategoria, c.descripcion as categoriadescripcion,s.idservicio, s.descripcion,s.precio,s.duracion,s.foto_url,t.video from servicio s join categoria c on c.idcategoria = s.idcategoria join tutorial t on s.idservicio = t.idservicio where s.idservicio = $1 order by t.fecha_hora desc limit 1',[
+    const respuesta = await pool.query('select c.idcategoria, c.descripcion as categoriadescripcion,s.idservicio, s.descripcion,s.precio,s.duracion,i.img,t.video from servicio s join categoria c on c.idcategoria = s.idcategoria join tutorial t on s.idservicio = t.idservicio join imgservicio i on s.idservicio = i.idservicio where s.idservicio = $1 order by t.fecha_hora desc limit 1',[
         idservicio
     ])
     res.status(200).json(respuesta.rows);
@@ -49,7 +62,7 @@ const detalleservicio = async(req,res)=>{
 
 
 const verServicios = async(req,res)=>{
-const respuesta = await pool.query('select s.idservicio,s.idcategoria, s.descripcion, s.duracion, s.precio,s.foto_url, c.descripcion as categoriadescripcion from servicio s join categoria c on c.idcategoria = s.idcategoria')
+const respuesta = await pool.query('select s.idservicio,s.idcategoria, s.descripcion, s.duracion, s.precio,i.img, c.descripcion as categoriadescripcion from servicio s join categoria c on c.idcategoria = s.idcategoria join imgservicio i on s.idservicio = i.idservicio')
 res.status(200).json(respuesta.rows);
 }
 
@@ -60,7 +73,7 @@ const verinicial = async(req,res)=>{
 
 const verservicio = async(req,res)=>{
 const idservicio = req.params.idservicio
-const response = await pool.query('select idservicio, idcategoria,descripcion,precio,duracion,foto_url from servicio where idservicio = $1',[
+const response = await pool.query('select s.idservicio, s.idcategoria,s.descripcion,s.precio,s.duracion,i.img from servicio s join imgservicio i on s.idservicio = i.idservicio where idservicio = $1 order by i.fecha_hora desc limit 1',[
     idservicio
 ])
 res.status(200).json(response.rows)
@@ -133,7 +146,7 @@ vercategorias = async(req,res)=>{
 
 const muestracategoria = async(req,res)=>{
 const idcategoria = req.params.idcategoria;
-const response = await pool.query('select c.idcategoria,c.descripcion as categoria, s.idservicio, s.descripcion, s.duracion, s.precio,s.foto_url from categoria c join servicio s on c.idcategoria = s.idcategoria where c.idcategoria = $1 ',[
+const response = await pool.query('select c.idcategoria,c.descripcion as categoria, s.idservicio, s.descripcion, s.duracion, s.precio,i.img from categoria c join servicio s on c.idcategoria = s.idcategoria join imgservicio i on s.idservicio = i.idservicio where c.idcategoria = $1 ',[
     idcategoria
 ])
 res.status(200).json(response.rows);

@@ -10,7 +10,7 @@ const upload = multer({ dest: 'uploads' });
 //servicios
 router.get('/servicio/:descripcion',buscarServicio);
 router.get('/servicios',verServicios)
-router.post('/servicios',upload.single("image"), crearservicio)
+router.post('/servicios',crearservicio)
 router.put('/servicio/editar/:idservicio', upload.single('foto'), editarServicio);
 router.delete('/servicio/:idservicio',eliminarservicio)
 router.get('/serviciobyid/:idservicio',verservicio)
