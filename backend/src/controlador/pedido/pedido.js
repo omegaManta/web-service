@@ -22,14 +22,14 @@ const crearpedido = async(req,res)=>{
 
 
 const verpedidos = async(req,res)=>{
-const response = await pool.query('select c.idempresa,s.idservicio, p.idpedido,c.ruc, c.email as correo,c.nombre_empresa,c.telefono as celular,c.contrato,s.descripcion as servicio, s.precio, s.duracion,s.foto_url,p.estado,p.fecha_hora from pedido p  join servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa')
+const response = await pool.query('select c.idempresa,s.idservicio, p.idpedido,c.ruc, c.email as correo,c.nombre_empresa,c.telefono as celular,c.contrato,s.descripcion as servicio, s.precio, s.duracion,i.img,p.estado,p.fecha_hora from pedido p  join servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa join imgservicio i on s.idservicio = i.idservicio')
 res.status(200).json(response.rows);
 }
 
 
 const verpedido = async(req,res)=>{
     const idpedido = req.params.idpedido;
-    const response = await pool.query('select c.idempresa,s.idservicio, p.idpedido,c.ruc, c.email as correo,c.nombre_empresa,c.telefono as celular,c.contrato,s.descripcion as servicio, s.precio, s.duracion,s.foto_url,p.estado,p.fecha_hora from pedido p join servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa where p.idpedido = $1',[
+    const response = await pool.query('select c.idempresa,s.idservicio, p.idpedido,c.ruc, c.email as correo,c.nombre_empresa,c.telefono as celular,c.contrato,s.descripcion as servicio, s.precio, s.duracion,i.img,p.estado,p.fecha_hora from pedido p join servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa join imgservicio i on s.idservicio = i.idservicio where p.idpedido = $1',[
         idpedido
     ])
     res.status(200).json(response.rows);
@@ -38,7 +38,7 @@ const verpedido = async(req,res)=>{
 
 const solicitudpedidos = async(req,res)=>{
 const nombres = req.params.nombres;
-const response = await pool.query('select p.idpedido,c.idempresa,c.ruc, c.nombre_empresa,c.email as correo,c.contrato,c.telefono as celular,s.descripcion as servicio, s.precio, s.duracion,s.foto_url,s.idservicio,p.estado,p.fecha_hora from pedido p join servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa where nombres like $1',[
+const response = await pool.query('select p.idpedido,c.idempresa,c.ruc, c.nombre_empresa,c.email as correo,c.contrato,c.telefono as celular,s.descripcion as servicio, s.precio, s.duracion,i.img,s.idservicio,p.estado,p.fecha_hora from pedido p join servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa join imgservicio i on s.idservicio = i.idservicio where nombres like $1',[
     nombres + '%'
 ])
 res.status(200).json(response.rows);
