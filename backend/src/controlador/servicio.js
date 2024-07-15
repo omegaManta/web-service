@@ -202,5 +202,6 @@ module.exports = {
     eliminarservicio,
     detalleservicio,
     contarservicios,
-    verinicial
+    verinicial,
+    imgservicio
 }

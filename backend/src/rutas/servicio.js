@@ -1,7 +1,7 @@
 const {buscarServicio,verServicios,crearservicio,verservicio,
     editarServicio,eliminarservicio,verinicial,
 crearcategoria,vercategorias,vercategoria,editarcategoria,
-eliminarcategoria,detalleservicio,muestracategoria,contarservicios
+eliminarcategoria,detalleservicio,muestracategoria,contarservicios,imgservicio
 } = require('../controlador/servicio')
 const {Router} = require('express')
 const router = Router()
@@ -11,6 +11,7 @@ const upload = multer({ dest: 'uploads' });
 router.get('/servicio/:descripcion',buscarServicio);
 router.get('/servicios',verServicios)
 router.post('/servicios',crearservicio)
+router.post('/imagen',upload.single('foto'),imgservicio)
 router.put('/servicio/editar/:idservicio', upload.single('foto'), editarServicio);
 router.delete('/servicio/:idservicio',eliminarservicio)
 router.get('/serviciobyid/:idservicio',verservicio)
