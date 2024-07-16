@@ -79,7 +79,7 @@ const verinicial = async(req,res)=>{
 
 const verservicio = async(req,res)=>{
 const idservicio = req.params.idservicio
-const response = await pool.query('select s.idservicio, s.idcategoria,s.descripcion,s.precio,s.duracion,i.img from servicio s join imgservicio i on s.idservicio = i.idservicio where idservicio = $1 order by i.fecha_hora desc limit 1',[
+const response = await pool.query('select s.idservicio, s.idcategoria,s.descripcion,s.precio,s.duracion from servicio s join imgservicio i on s.idservicio = i.idservicio where idservicio = $1',[
     idservicio
 ])
 res.status(200).json(response.rows)
