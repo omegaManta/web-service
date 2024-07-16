@@ -66,6 +66,12 @@ const respuesta = await pool.query('select s.idservicio,s.idcategoria, s.descrip
 res.status(200).json(respuesta.rows);
 }
 
+const verimagenes = async(req,res)=>{
+    const respuesta = await pool.query('select s.idservicio,s.idcategoria, s.descripcion, s.duracion, s.precio,i.img, c.descripcion as categoriadescripcion from servicio s join categoria c on c.idcategoria = s.idcategoria join imgservicio i on s.idservicio = i.idservicio order by i.fecha_hora desc limit 1')
+    res.status(200).json(respuesta.rows);
+    }
+
+
 const verinicial = async(req,res)=>{
     res.send('Bienvenido a mi servidor en la nube')
     }
@@ -203,5 +209,6 @@ module.exports = {
     detalleservicio,
     contarservicios,
     verinicial,
-    imgservicio
+    imgservicio,
+    verimagenes
 }
