@@ -6,20 +6,16 @@ const upload = multer({ dest: 'uploads' });
 
 //servicios
 const crearservicio = async(req,res)=>{
-    try {
-        const {idcategoria,descripcion,precio,duracion
-        } = req.body;
-        const guardar = await pool.query('insert into servicio(idcategoria,descripcion,precio,duracion)values($1,$2,$3,$4)',[
+const {idcategoria,descripcion,precio,duracion} = req.body;
+ const guardar = await pool.query('insert into servicio(idcategoria,descripcion,precio,duracion)values($1,$2,$3,$4)',[
             idcategoria,
             descripcion,
             precio,
             duracion
         ])
-        res.status(200).json(result)
-    } catch (error) {
-      console.error(error);
-      res.status(400).send(error.message);
-    }
+        res.json({
+            message: 'Servicio creado sastifactoriamente'
+        })
 }
 
 //imagen para cada servicio
