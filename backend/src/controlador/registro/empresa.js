@@ -193,7 +193,7 @@ const dominio = 'https://e-commerce-mjyp3g1li-adriano-parrales-projects.vercel.a
             
             
            const ver = async(req,res)=> {
-            const datosEmpresa = await pool.query('SELECT * FROM planes p join empresa e on p.idplan = e.idplan');
+            const datosEmpresa = await pool.query('SELECT * FROM usuario p join empresa e on p.idusuario = e.idusuario');
             res.status(200).json(datosEmpresa.rows)
             }
        
@@ -225,7 +225,7 @@ res.json({
 
 const vercliente = async(req,res)=>{
   const idEmpresa = req.params.idEmpresa
-  const response = await pool.query('select idEmpresa,ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idplan from copia where idEmpresa = $1',[
+  const response = await pool.query('select idEmpresa,ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idusuario from copia where idEmpresa = $1',[
     idEmpresa
   ])
   res.status(200).json(response.rows)
@@ -238,8 +238,8 @@ const {ruc,email,telefono,direccion,nombre_empresa,
 contacto,
 ciudad,
 password,
-idplan} = req.body
-const actualizar = await pool.query('update copia set ruc = $1, email = $2, telefono = $3, direccion = $4, nombre_empresa = $5, contacto = $6, ciudad = $7, password = $8, idplan = $9 where idEmpresa = $10',[
+idusuario} = req.body
+const actualizar = await pool.query('update copia set ruc = $1, email = $2, telefono = $3, direccion = $4, nombre_empresa = $5, contacto = $6, ciudad = $7, password = $8, idusuario = $9 where idEmpresa = $10',[
 ruc,
 email,
 telefono,
@@ -247,14 +247,14 @@ direccion,
 nombre_empresa,
 contacto,ciudad,
 password,
-idplan,
+idusuario,
 idEmpresa
 ])
 }
 
 
 const vertodo = async(req,res)=>{
-const response = await pool.query('select idempresa,ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idplan,contrato,fecha_ingreso from copia')
+const response = await pool.query('select idempresa,ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idusuario,contrato,fecha_ingreso from copia')
 res.status(200).json(response.rows);
 }
 
