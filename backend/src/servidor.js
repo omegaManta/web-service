@@ -8,6 +8,11 @@ server.use(bodyParser.json({limit: "50mb"}));
 server.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 server.use(cors());
 
+// CORS options
+const corsOptions = {
+    origin: 'http://localhost:4200',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  };
 
 
 
