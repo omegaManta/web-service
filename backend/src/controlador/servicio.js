@@ -7,7 +7,7 @@ const upload = multer({ dest: 'uploads' });
 //servicios
 const crearservicio = async(req,res)=>{
 const {idcategoria,descripcion,precio,duracion} = req.body;
- const guardar = await pool.query('insert into servicio(idcategoria,descripcion,precio,duracion)values($1,$2,$3,$4)',[
+ const guardar = await pool.query('insert into servicio(idcategoria,idusuario,descripcion,precio,duracion)values($1,$2,$3,$4)',[
             idcategoria,
             descripcion,
             precio,
@@ -16,25 +16,6 @@ const {idcategoria,descripcion,precio,duracion} = req.body;
         res.json({
             message: 'Servicio creado sastifactoriamente'
         })
-}
-
-//imagen para cada servicio
-const imgservicio = async(req,res) => {
-    try {
-        const result = await cloudinary.uploader.upload(req.file.path,{
-            folder: 'imagenes-servicios',
-        })
-        const fotoUrl = result.secure_url;
-        const {idservicio} = req.body;
-        const guardar = await pool.query('insert into imgservicio(idservicio,img)values($1,$2)',[
-            idservicio,
-            fotoUrl
-        ])
-        res.status(200).json(result)
-    } catch (error) {
-      console.error(error);
-      res.status(400).send(error.message);
-    }
 }
 
 
@@ -58,14 +39,10 @@ const detalleservicio = async(req,res)=>{
 
 
 const verServicios = async(req,res)=>{
-const respuesta = await pool.query('select s.idservicio,s.idcategoria, s.descripcion, s.duracion, s.precio, i.img, c.descripcion as categoriadescripcion from servicio s join categoria c on c.idcategoria = s.idcategoria join imgservicio i on s.idservicio = i.idservicio')
+const respuesta = await pool.query('select s.idservicio,s.idcategoria, s.descripcion, s.duracion, s.precio, s.foto, c.descripcion as categoriadescripcion from servicio s join categoria c on c.idcategoria = s.idcategoria')
 res.status(200).json(respuesta.rows);
 }
 
-const verimagenes = async(req,res)=>{
-    const respuesta = await pool.query('select s.idservicio,s.idcategoria, s.descripcion, s.duracion, s.precio,i.img, c.descripcion as categoriadescripcion from servicio s join categoria c on c.idcategoria = s.idcategoria join imgservicio i on s.idservicio = i.idservicio order by i.fecha_hora desc limit 1')
-    res.status(200).json(respuesta.rows);
-    }
 
 
 const verinicial = async(req,res)=>{
@@ -148,7 +125,7 @@ vercategorias = async(req,res)=>{
 
 const muestracategoria = async(req,res)=>{
 const idcategoria = req.params.idcategoria;
-const response = await pool.query('select c.idcategoria,c.descripcion as categoria, s.idservicio, s.descripcion, s.duracion, s.precio,i.img from categoria c join servicio s on c.idcategoria = s.idcategoria join imgservicio i on s.idservicio = i.idservicio where c.idcategoria = $1 ',[
+const response = await pool.query('select c.idcategoria,c.descripcion as categoria, s.idservicio, s.descripcion, s.duracion, s.precio,s.foto from categoria c join servicio s on c.idcategoria = s.idcategoria where c.idcategoria = $1 ',[
     idcategoria
 ])
 res.status(200).json(response.rows);
@@ -204,7 +181,5 @@ module.exports = {
     eliminarservicio,
     detalleservicio,
     contarservicios,
-    verinicial,
-    imgservicio,
-    verimagenes
+    verinicial
 }

@@ -1,6 +1,8 @@
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const {pool} = require('../../db/conexion');
+const jwt = require('jsonwebtoken');
+
 
 
 const upload = multer({ dest: 'uploads' });

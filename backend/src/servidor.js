@@ -8,11 +8,6 @@ server.use(bodyParser.json({limit: "50mb"}));
 server.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 server.use(cors());
 
-// CORS options
-const corsOptions = {
-    origin: 'http://localhost:4200',
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-  };
 
 
 
@@ -29,7 +24,7 @@ server.use(require('../src/rutas/registro/empresa'))
 //inicio de sesion
 server.use(require('../src/rutas/login/empresa'))
 //planes
-server.use(require('../src/rutas/plan/plan'))
+//server.use(require('../src/rutas/plan/plan'))
 //tecnicos
 server.use(require('../src/rutas/tecnico/tecnico'))
 //desactivados
