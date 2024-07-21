@@ -8,10 +8,9 @@ const upload = multer({ dest: 'uploads' });
 //identificacion para la empresa
 const crearidentificacion = async(req,res)=>{
     try {
-        const {idusuario,nombre,email,cliente_id,mision,vision} = req.body;
-        const guardar = await pool.query('insert into nombres_empresa(idusuario,nombre,email,cliente_id,mision,vision)values($1,$2,$3,$4,$5,$6)',[
+        const {idusuario,email,cliente_id,mision,vision} = req.body;
+        const guardar = await pool.query('insert into nombres_empresa(idusuario,email,cliente_id,mision,vision)values($1,$2,$3,$4,$5)',[
             idusuario,
-            nombre,
             email,
             cliente_id,
             mision,
@@ -57,7 +56,7 @@ const mostraridentificacionunica = async(req,res)=>{
   }
 
 const mostrartodo = async(req,res)=>{
-    const response = await pool.query('select idname,nombre,mision,vision from nombres_empresa')
+    const response = await pool.query('select idname,mision,cliente_id,email,vision from nombres_empresa')
     res.status(200).json(response.rows);
 }
 
