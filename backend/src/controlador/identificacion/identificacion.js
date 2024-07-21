@@ -76,7 +76,7 @@ const eliminarnombre = async(req,res)=>{
 //logo para la empresa
 const crearlogo = async(req,res)=>{
     const result = await cloudinary.uploader.upload(req.file.path,{
-        resource_type: 'video',
+        resource_type: 'auto',
         folder: 'empresas'
     })
     const logoUrl = result.secure_url;
