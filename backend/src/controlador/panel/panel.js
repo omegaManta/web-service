@@ -25,15 +25,16 @@ const verroles = async(req,res)=>{
 
 const crearusuario = async(req,res)=>{
     const {idrol,ruc,email,
-        telefono,direccion,nombre_propietario,contacto,ciudad
+        telefono,direccion,nombre_propietario,nombres_empresa,contacto,ciudad
         ,password} = req.body;
-    const guarda = await pool.query('insert into usuario(idrol,ruc,email,telefono,direccion,nombre_propietario,contacto,ciudad,password)values($1,$2,$3,$4,$5,$6,$7,$8,$9)',[
+    const guarda = await pool.query('insert into usuario(idrol,ruc,email,telefono,direccion,nombre_propietario,nombres_empresa,contacto,ciudad,password)values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',[
         idrol,
         ruc,
         email,
         telefono,
         direccion,
         nombre_propietario,
+        nombres_empresa,
         contacto,
         ciudad,
         password
@@ -83,7 +84,7 @@ const verperfil = async (req, res) => {
     const decoded = jwt.verify(token, 'panel omega web');
     const userId = decoded.userId;
 
-    const result = await pool.query('select c.idusuario,r.rol, c.ruc, c.email, c.nombre_propietario, c.telefono,c.direccion,c.ciudad from usuario c inner join rol r on r.idrol = c.idrol  where c.idusuario = $1', [userId]);
+    const result = await pool.query('select c.idusuario,r.rol, c.ruc, c.email, c.nombre_propietario,c.nombres_empresa, c.telefono,c.direccion,c.ciudad from usuario c inner join rol r on r.idrol = c.idrol  where c.idusuario = $1', [userId]);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Perfil de usuario no encontrado' });
@@ -149,15 +150,16 @@ const verusuario = async(req,res)=>{
 const editarusuario = async(req,res)=> {
   const idusuario = req.params.idusuario;
   const {idrol,ruc,email,
-    telefono,direccion,nombre_propietario,contacto,ciudad
+    telefono,direccion,nombre_propietario,nombres_empresa,contacto,ciudad
     ,password} = req.body;
-    const edicion = await pool.query('update usuario set idrol = $1, ruc = $2, email = $3, telefono = $4, direccion = $5, nombre_propietario = $6,contacto = $7,ciudad = $8,password = $9 where idusuario = $10',[
+    const edicion = await pool.query('update usuario set idrol = $1, ruc = $2, email = $3, telefono = $4, direccion = $5, nombre_propietario = $6,nombres_empresa = $7, contacto = $8,ciudad = $9,password = $10 where idusuario = $11',[
       idrol,
       ruc,
       email,
       telefono,
       direccion,
       nombre_propietario,
+      nombres_empresa,
       contacto,
       ciudad,
       password,
