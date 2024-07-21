@@ -14,7 +14,7 @@ const crearCuenta = async (req, res) => {
     });
     const pdfUrl = result.secure_url;
 
-    const { ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idplan } = req.body;
+    const { ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idusuario } = req.body;
 
     const dominio = 'https://factura.omegas-apps.com/panel/welcome/autorizar'
     
@@ -73,8 +73,8 @@ const crearCuenta = async (req, res) => {
 
         // Guardar la empresa en la base de datos
         const guarda = pool.query(
-          'INSERT INTO empresa (ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idplan, contrato) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
-          [ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idplan, pdfUrl]
+          'INSERT INTO empresa (ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idusuario, contrato) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
+          [ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idusuario, pdfUrl]
         );
 
         // Responder al cliente que todo fue exitoso
@@ -94,7 +94,7 @@ const crearCuenta = async (req, res) => {
 
 const getSolicitudes = async(req,res)=>{
 const nombre_empresa = req.params.nombre_empresa; 
-const respuesta = await pool.query('SELECT * FROM planes p join empresa e on p.idplan = e.idplan where nombre_empresa like $1',[
+const respuesta = await pool.query('SELECT * FROM usuario p join empresa e on p.idusuario = e.idusuario where nombre_empresa like $1',[
     nombre_empresa + '%'
 ])
 res.status(200).json(respuesta.rows);
@@ -109,7 +109,7 @@ const crearSolicitud = async(req,res)=>{
   fecha_ingreso,
   ciudad,
   password,
-  idplan,contrato
+  idusuario,contrato
   } = req.body;
 const dominio = 'https://e-commerce-mjyp3g1li-adriano-parrales-projects.vercel.app/'
 
@@ -160,8 +160,8 @@ const dominio = 'https://e-commerce-mjyp3g1li-adriano-parrales-projects.vercel.a
 
       // Guardar la empresa en la base de datos
       const guarda = pool.query(
-        'INSERT INTO copia(ruc, email, telefono, direccion, nombre_empresa, contacto,fecha_ingreso, ciudad, password, idplan, contrato) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,$11)',
-        [ruc, email, telefono, direccion, nombre_empresa, contacto,fecha_ingreso, ciudad, password, idplan, contrato]
+        'INSERT INTO copia(ruc, email, telefono, direccion, nombre_empresa, contacto,fecha_ingreso, ciudad, password, idusuario, contrato) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,$11)',
+        [ruc, email, telefono, direccion, nombre_empresa, contacto,fecha_ingreso, ciudad, password, idusuario, contrato]
       );
 
       // Responder al cliente que todo fue exitoso
@@ -200,13 +200,13 @@ const dominio = 'https://e-commerce-mjyp3g1li-adriano-parrales-projects.vercel.a
 
             
 const veraceptados = async(req,res)=>{
-  const response = await pool.query('select d.idEmpresa, d.ruc, d.email, d.telefono, d.direccion, d.nombre_empresa, d.contacto, d.ciudad, d.password, d.idplan,d.fecha_ingreso,d.contrato, p.descripcion,p.valor from planes p join copia d on p.idplan = d.idplan')
+  const response = await pool.query('select d.idEmpresa, d.ruc, d.email, d.telefono, d.direccion, d.nombre_empresa, d.contacto, d.ciudad, d.password, d.idusuario,d.fecha_ingreso,d.contrato, p.nombres_empresa from usuario p join copia d on p.idusuario = d.idusuario')
   res.status(200).json(response.rows)
 }
 
 const buscaraceptados = async(req,res)=>{
   const nombre_empresa = req.params.nombre_empresa
-  const response = await pool.query('select d.idEmpresa, d.ruc, d.email, d.telefono, d.direccion, d.nombre_empresa, d.contacto, d.ciudad, d.password, d.idplan,d.fecha_ingreso, p.descripcion,p.valor,d.contrato from planes p join copia d on p.idplan = d.idplan where nombre_empresa like $1',[
+  const response = await pool.query('select d.idEmpresa, d.ruc, d.email, d.telefono, d.direccion, d.nombre_empresa, d.contacto, d.ciudad, d.password, d.idplan,d.fecha_ingreso, p.nombres_empresa,d.contrato from usuario p join copia d on p.idusuario = d.idusuario where nombre_empresa like $1',[
     nombre_empresa + '%'
   ])
   res.status(200).json(response.rows)
