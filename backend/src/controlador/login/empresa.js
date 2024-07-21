@@ -37,7 +37,7 @@ const verperfil = async(req,res)=>{
     const decoded = jwt.verify(token, 'sistema omega web');
     const userId = decoded.userId;
 
-    pool.query('select c.idempresa, c.ruc, c.email, c.nombre_empresa, c.telefono,c.direccion,c.ciudad,c.contrato,p.nombres_empresa,p.nombre_propietario from copia c join usuario p on c.idusuario = p.idusuario where c.idempresa = $1', [userId], (err, result) => {
+    pool.query('select c.idempresa, c.ruc, c.email, c.nombre_empresa, c.telefono,c.direccion,c.ciudad,c.contrato,p.nombres_empresa,p.nombre_propietario,p.idusuario from copia c join usuario p on c.idusuario = p.idusuario where c.idempresa = $1', [userId], (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
@@ -67,7 +67,7 @@ const verperfilpedidos = async(req,res)=>{
     const decoded = jwt.verify(token, 'sistema omega web');
     const userId = decoded.userId;
 
-    pool.query('select p.idpedido,s.descripcion, c.nombre_empresa,c.telefono,c.contrato, s.precio, s.duracion,s.foto,p.estado,p.fecha_hora from pedido p join  servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa where c.idempresa = $1 group by p.idpedido,s.descripcion,c.nombre_empresa,c.telefono,c.contrato,s.precio,s.duracion,s.foto,p.estado,p.fecha_hora', [userId], (err, result) => {
+    pool.query('select p.idpedido,s.descripcion, c.nombre_empresa,c.telefono,c.contrato, s.precio,s.foto,p.estado,p.fecha_hora from pedido p join  servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa where c.idempresa = $1 group by p.idpedido,s.descripcion,c.nombre_empresa,c.telefono,c.contrato,s.precio,s.foto,p.estado,p.fecha_hora', [userId], (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
@@ -336,7 +336,7 @@ const verecibo = async(req,res)=>{
     const decoded = jwt.verify(token, 'sistema omega web');
     const userId = decoded.userId;
 
-    pool.query('select s.descripcion,count(*),sum(s.precio), c.nombre_empresa,c.telefono,c.contrato, s.precio, s.duracion,i.img,p.estado from pedido p  join servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa join imgservicio i on s.idservicio = i.idservicio where c.idempresa = $1 group by s.descripcion,c.nombre_empresa,c.telefono,c.contrato,s.precio,s.duracion,i.img,p.estado', [userId], (err, result) => {
+    pool.query('select s.descripcion,count(*),sum(s.precio), c.nombre_empresa,c.telefono,c.contrato, s.precio,s.foto,p.estado from pedido p  join servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa where c.idempresa = $1 group by s.descripcion,c.nombre_empresa,c.telefono,c.contrato,s.precio,s.foto,p.estado', [userId], (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
