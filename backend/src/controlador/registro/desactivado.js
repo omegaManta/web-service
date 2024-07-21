@@ -5,15 +5,15 @@ const {pool} = require('../../db/conexion')
 const creardesactivado = async (req, res) => {
     const {
       ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, 
-      idplan,
+      idusuario,
       contrato
     } = req.body;
 
     const guarda = await pool.query(
-      'INSERT INTO desactivado(ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idplan,contrato) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9,$10)',
+      'INSERT INTO desactivado(ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idusuario,contrato) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9,$10)',
       [
         ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad,password,
-         idplan,
+         idusuario,
          contrato
       ]
     );
@@ -26,7 +26,7 @@ const creardesactivado = async (req, res) => {
 
 
   const mostrardesactivados = async(req,res )=>{
-  const response = await pool.query('select d.idEmpresa, d.ruc, d.email, d.telefono, d.direccion, d.nombre_empresa, d.contacto, d.ciudad, d.password, d.idplan,d.fecha_ingreso,d.contrato, p.descripcion,p.valor from planes p join desactivado d on p.idplan = d.idplan')
+  const response = await pool.query('select d.idEmpresa, d.ruc, d.email, d.telefono, d.direccion, d.nombre_empresa, d.contacto, d.ciudad, d.password, d.idplan,d.fecha_ingreso,d.contrato, p.nombres_empresa from usuario p join desactivado d on p.idusuario = d.idusuario')
   res.status(200).json(response.rows)
   }
 
@@ -46,7 +46,7 @@ const creardesactivado = async (req, res) => {
 
   const buscardesactivados = async(req,res)=>{
     const nombre_empresa = req.params.nombre_empresa
-    const response = await pool.query('select d.idEmpresa, d.ruc, d.email, d.telefono, d.direccion, d.nombre_empresa, d.contacto, d.ciudad, d.password, d.idplan,d.fecha_ingreso, p.descripcion,p.valor,d.contrato from planes p join desactivado d on p.idplan = d.idplan where d.nombre_empresa like $1',[
+    const response = await pool.query('select d.idEmpresa, d.ruc, d.email, d.telefono, d.direccion, d.nombre_empresa, d.contacto, d.ciudad, d.password, d.idplan,d.fecha_ingreso, p.nombres_empresa,d.contrato from usuario p join desactivado d on p.idusuario = d.idusuario where d.nombre_empresa like $1',[
       nombre_empresa + '%'
     ])
     res.status(200).json(response.rows)
