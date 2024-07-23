@@ -1,7 +1,8 @@
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const nodemailer = require('nodemailer');
-const {pool} = require('../../db/conexion')
+const {pool} = require('../../db/conexion');
+const jwt = require('jsonwebtoken');
 
 
 const upload = multer({dest: 'uploads'})
