@@ -48,7 +48,7 @@ server.use(require('../src/rutas/emails/email'));
 //roles-usuarios
 server.use(require('../src/rutas/panel/panel'));
 //menu usuarios
-server.use(require('../src/rutas/panel/menu'));
+//server.use(require('../src/rutas/panel/menu'));
 //recibos del cliente
 server.use(require('../src/rutas/recibo/recibo'));
 //lista de deseos de los clientes
