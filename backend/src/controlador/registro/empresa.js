@@ -144,9 +144,8 @@ const crearSolicitud = async(req,res)=>{
   const mailOptions = {
     from: 'notificaciones@omegas-apps.com',
     to: email,
-    subject: 'Cliente '+nombre_empresa+ ' aceptado',
+    subject: 'Cliente '+nombre_empresa+ ' añadido a la tienda de',
     text: 'Gracias por preferirnos....... puede iniciar sesion al siguiente link: '
-    +dominio,
   };
 
  
