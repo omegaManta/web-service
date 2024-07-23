@@ -198,13 +198,41 @@ const crearSolicitud = async(req,res)=>{
 
             
 const veraceptados = async(req,res)=>{
-  const response = await pool.query('select d.idEmpresa, d.ruc, d.email, d.telefono, d.direccion, d.nombre_empresa, d.contacto, d.ciudad, d.password, d.idusuario,d.fecha_ingreso,d.contrato, p.nombres_empresa from usuario p join copia d on p.idusuario = d.idusuario')
+  const response = await pool.query('select d.idEmpresa, d.ruc, d.email, d.telefono, d.direccion, d.nombre_empresa, d.contacto, d.ciudad, d.password, d.idusuario,d.fecha_ingreso, p.nombres_empresa from usuario p join copia d on p.idusuario = d.idusuario')
   res.status(200).json(response.rows)
 }
 
+
+const verclientesusuario = async (req, res) => {
+  const token = req.headers.authorization;
+  
+  if (!token) {
+    return res.status(401).json({ error: 'Token no proporcionado' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, 'panel omega web');
+    const userId = decoded.userId;
+
+    const result = await pool.query('select d.idEmpresa, d.ruc, d.email, d.telefono, d.direccion, d.nombre_empresa, d.contacto, d.ciudad, d.password, d.idusuario,d.fecha_ingreso, p.nombres_empresa from usuario p join copia d on p.idusuario = d.idusuario where p.idusuario = $1', [userId]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Perfil de usuario no encontrado' });
+    }
+
+    const userProfile = result.rows;
+    return res.json({ profile: userProfile });
+  } catch (error) {
+    console.error(error);
+    return res.status(401).json({ error: 'Token inválido' });
+  }
+};
+
+
+
 const buscaraceptados = async(req,res)=>{
   const nombre_empresa = req.params.nombre_empresa
-  const response = await pool.query('select d.idEmpresa, d.ruc, d.email, d.telefono, d.direccion, d.nombre_empresa, d.contacto, d.ciudad, d.password, d.idplan,d.fecha_ingreso, p.nombres_empresa,d.contrato from usuario p join copia d on p.idusuario = d.idusuario where nombre_empresa like $1',[
+  const response = await pool.query('select d.idEmpresa, d.ruc, d.email, d.telefono, d.direccion, d.nombre_empresa, d.contacto, d.ciudad, d.password, d.idplan,d.fecha_ingreso, p.nombres_empresa from usuario p join copia d on p.idusuario = d.idusuario where nombre_empresa like $1',[
     nombre_empresa + '%'
   ])
   res.status(200).json(response.rows)
@@ -274,6 +302,7 @@ crearSolicitud,
 eliminarEmpresa,
 ver,
 veraceptados,
+verclientesusuario,
 buscaraceptados,
 desactivarcliente,
 vercliente,

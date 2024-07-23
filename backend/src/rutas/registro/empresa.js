@@ -1,6 +1,7 @@
 const {Router} = require('express')
 const {crearCuenta, getSolicitudes, 
-    crearSolicitud, veraceptados, buscaraceptados,
+    crearSolicitud, veraceptados,verclientesusuario,
+     buscaraceptados,
 eliminarEmpresa, ver, 
 desactivarcliente, 
 vercliente,
@@ -20,6 +21,7 @@ router.get('/ver', ver)
 router.post('/solicitud',crearSolicitud)
 router.delete('/empresa/:idEmpresa',eliminarEmpresa)
 router.get('/aceptados',veraceptados)
+router.get('/clientes-usuario',verclientesusuario)
 router.get('/aceptados/:nombre_empresa',buscaraceptados)
 router.delete('/aceptado/:idEmpresa',desactivarcliente)
 router.get('/aceptado/:idEmpresa',vercliente)
