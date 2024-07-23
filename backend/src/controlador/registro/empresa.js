@@ -106,12 +106,10 @@ const crearSolicitud = async(req,res)=>{
   direccion,
   nombre_empresa,
   contacto,
-  fecha_ingreso,
   ciudad,
   password,
-  idusuario,contrato
+  idusuario
   } = req.body;
-const dominio = 'https://e-commerce-mjyp3g1li-adriano-parrales-projects.vercel.app/'
 
   
   // Configuración del transporte para NodeMailer (Hotmail/Outlook)
@@ -160,8 +158,8 @@ const dominio = 'https://e-commerce-mjyp3g1li-adriano-parrales-projects.vercel.a
 
       // Guardar la empresa en la base de datos
       const guarda = pool.query(
-        'INSERT INTO copia(ruc, email, telefono, direccion, nombre_empresa, contacto,fecha_ingreso, ciudad, password, idusuario, contrato) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,$11)',
-        [ruc, email, telefono, direccion, nombre_empresa, contacto,fecha_ingreso, ciudad, password, idusuario, contrato]
+        'INSERT INTO copia(ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idusuario) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+        [ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idusuario]
       );
 
       // Responder al cliente que todo fue exitoso

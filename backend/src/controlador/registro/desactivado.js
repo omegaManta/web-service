@@ -5,16 +5,14 @@ const {pool} = require('../../db/conexion')
 const creardesactivado = async (req, res) => {
     const {
       ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, 
-      idusuario,
-      contrato
+      idusuario
     } = req.body;
 
     const guarda = await pool.query(
-      'INSERT INTO desactivado(ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idusuario,contrato) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9,$10)',
+      'INSERT INTO desactivado(ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idusuario) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
       [
         ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad,password,
-         idusuario,
-         contrato
+         idusuario
       ]
     );
   
