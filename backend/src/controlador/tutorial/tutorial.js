@@ -24,11 +24,23 @@ const creartutorial = async(req,res)=>{
 
 
 const tutoriales = async(req,res)=>{
-const response = await pool.query('select t.video,s.descripcion,s.duracion,s.precio from tutorial t join servicio s on s.idservicio = t.idservicio')
+const response = await pool.query('select t.video,s.descripcion,s.precio from tutorial t join servicio s on s.idservicio = t.idservicio')
 res.status(200).json(response.rows);
+}
+
+
+const eliminartutorial = async(req,res) => {
+  const idtutorial = req.params.idtutorial;
+  const eliminar = await pool.query('delete from tutorial where idtutorial = $1',[
+    idtutorial
+  ]);
+  res.json({
+    message: 'Tutorial eliminado'
+  })
 }
 
 module.exports = {
     creartutorial,
-    tutoriales
+    tutoriales,
+    eliminartutorial
 }
