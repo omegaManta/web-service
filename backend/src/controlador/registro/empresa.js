@@ -109,7 +109,9 @@ const crearSolicitud = async(req,res)=>{
   contacto,
   ciudad,
   password,
-  idusuario
+  idusuario,
+  nombres_empresa,
+  nombre_propietario
   } = req.body;
 
   
@@ -144,8 +146,10 @@ const crearSolicitud = async(req,res)=>{
   const mailOptions = {
     from: 'notificaciones@omegas-apps.com',
     to: email,
-    subject: 'Cliente '+nombre_empresa+ ' añadido a la tienda de',
-    text: 'Gracias por preferirnos....... puede iniciar sesion al siguiente link: '
+    subject: 'Cliente '+nombre_empresa+ ' por favor cambiar contraseña y no compartir sus datos con nadie',
+    text: 'Gracias por preferirnos usted ha sido añadido a la tienda '+nombres_empresa+ ' de '+nombre_propietario+ 
+    '. Inicie sesion con las siguientes credenciales correo = '+email+ ' contraseña = '+password+ 
+    '. Por favor no comparta su informacion con nadie.......'
   };
 
  
@@ -164,6 +168,7 @@ const crearSolicitud = async(req,res)=>{
 
       // Responder al cliente que todo fue exitoso
       res.status(200).json({ success: true });
+      notificartienda(email);
     }
   });
   
