@@ -37,7 +37,7 @@ const verperfil = async(req,res)=>{
     const decoded = jwt.verify(token, 'sistema omega web');
     const userId = decoded.userId;
 
-    pool.query('select c.idempresa, c.ruc, c.email, c.nombre_empresa, c.telefono,c.direccion,c.ciudad,c.contrato,p.nombres_empresa,p.nombre_propietario,p.idusuario from copia c join usuario p on c.idusuario = p.idusuario where c.idempresa = $1', [userId], (err, result) => {
+    pool.query('select c.idempresa, c.ruc, c.email, c.nombre_empresa, c.telefono,c.direccion,c.ciudad,p.nombres_empresa,p.nombre_propietario,p.idusuario from copia c join usuario p on c.idusuario = p.idusuario where c.idempresa = $1', [userId], (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
@@ -67,7 +67,7 @@ const verperfilpedidos = async(req,res)=>{
     const decoded = jwt.verify(token, 'sistema omega web');
     const userId = decoded.userId;
 
-    pool.query('select p.idpedido,s.descripcion, c.nombre_empresa,c.telefono,c.contrato, s.precio,s.foto,p.estado,p.fecha_hora from pedido p join  servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa where c.idempresa = $1 group by p.idpedido,s.descripcion,c.nombre_empresa,c.telefono,c.contrato,s.precio,s.foto,p.estado,p.fecha_hora', [userId], (err, result) => {
+    pool.query('select p.idpedido,s.descripcion, c.nombre_empresa,c.telefono, s.precio,s.foto,p.estado,p.fecha_hora from pedido p join  servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa where c.idempresa = $1 group by p.idpedido,s.descripcion,c.nombre_empresa,c.telefono,c.contrato,s.precio,s.foto,p.estado,p.fecha_hora', [userId], (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
@@ -96,7 +96,7 @@ const verperfiltrabajosrealizados = async(req,res)=>{
     const decoded = jwt.verify(token, 'sistema omega web');
     const userId = decoded.userId;
 
-    pool.query('select p.idpedido,c.idempresa, c.nombre_empresa,c.telefono,c.contrato, t.nombre_propietario as tecnico_escogido,t.ciudad,t.ruc,p.mensaje as requiere,s.descripcion as servicio, s.precio, s.duracion,s.foto_url, p.estado,p.fecha_hora from trabajo_realizado p join usuario t on t.idusuario = p.idusuario join servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa where c.idempresa = $1', [userId], (err, result) => {
+    pool.query('select p.idpedido,c.idempresa, c.nombre_empresa,c.telefono,t.nombre_propietario as tecnico_escogido,t.ciudad,t.ruc,p.mensaje as requiere,s.descripcion as servicio, s.precio, s.duracion,s.foto_url, p.estado,p.fecha_hora from trabajo_realizado p join usuario t on t.idusuario = p.idusuario join servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa where c.idempresa = $1', [userId], (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
@@ -124,7 +124,7 @@ const verperfilcomentario = async(req,res)=>{
     const decoded = jwt.verify(token, 'sistema omega web');
     const userId = decoded.userId;
 
-    pool.query('select t.idpedido,o.comentario,t.estado,c.idempresa,c.nombre_empresa,c.ruc,c.direccion,c.contrato,c.email from observacion o join trabajo_realizado t on t.idpedido = o.idpedido join copia c on c.idempresa = t.idempresa where c.idempresa = $1', [userId], (err, result) => {
+    pool.query('select t.idpedido,o.comentario,t.estado,c.idempresa,c.nombre_empresa,c.ruc,c.direccion,c.email from observacion o join trabajo_realizado t on t.idpedido = o.idpedido join copia c on c.idempresa = t.idempresa where c.idempresa = $1', [userId], (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
@@ -155,7 +155,7 @@ const verperfilvisitas = async(req,res)=>{
     const decoded = jwt.verify(token, 'sistema omega web');
     const userId = decoded.userId;
 
-    pool.query('select c.nombre_empresa,t.nombres,c.contrato,c.ruc,c.direccion, v.fecha_visita,v.hora_visita from visita v join copia c on c.idempresa = v.idempresa join tecnico t on t.idtecnico = v.idtecnico where v.idempresa = $1', [userId], (err, result) => {
+    pool.query('select c.nombre_empresa,t.nombres,c.ruc,c.direccion, v.fecha_visita,v.hora_visita from visita v join copia c on c.idempresa = v.idempresa join tecnico t on t.idtecnico = v.idtecnico where v.idempresa = $1', [userId], (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
@@ -187,7 +187,7 @@ const verperfildetalleobservacion = async(req,res)=>{
     const decoded = jwt.verify(token, 'sistema omega web');
     const userId = decoded.userId;
 
-    pool.query('select o.idob,s.foto_url, t.idpedido,o.comentario,t.mensaje,t.estado,c.idempresa,c.nombre_empresa,c.ruc,c.direccion,c.contrato,c.email,s.descripcion,te.nombre_propietario from observacion o join trabajo_realizado t on t.idpedido = o.idpedido join copia c on c.idempresa = t.idempresa join servicio s on s.idservicio = t.idservicio join usuario te on te.idusuario = t.idusuario where t.idpedido = $1 and c.idempresa = $2 order by o.fecha_hora desc', [idpedido,userId], (err, result) => {
+    pool.query('select o.idob,s.foto_url, t.idpedido,o.comentario,t.mensaje,t.estado,c.idempresa,c.nombre_empresa,c.ruc,c.direccion,c.email,s.descripcion,te.nombre_propietario from observacion o join trabajo_realizado t on t.idpedido = o.idpedido join copia c on c.idempresa = t.idempresa join servicio s on s.idservicio = t.idservicio join usuario te on te.idusuario = t.idusuario where t.idpedido = $1 and c.idempresa = $2 order by o.fecha_hora desc', [idpedido,userId], (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
