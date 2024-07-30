@@ -203,7 +203,7 @@ const crearSolicitud = async(req,res)=>{
 
             
 const veraceptados = async(req,res)=>{
-  const response = await pool.query('select d.idEmpresa, d.ruc, d.email, d.telefono, d.direccion, d.nombre_empresa, d.contacto, d.ciudad, d.password, d.idusuario,d.fecha_ingreso, p.nombres_empresa from usuario p join copia d on p.idusuario = d.idusuario')
+  const response = await pool.query('select d.idEmpresa, d.ruc, d.email, d.telefono, d.direccion, d.nombre_empresa, d.contacto, d.ciudad, d.password, d.idusuario,d.fecha_ingreso, p.empresa from usuario p join copia d on p.idusuario = d.idusuario')
   res.status(200).json(response.rows)
 }
 
