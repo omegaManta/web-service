@@ -11,7 +11,7 @@ const upload = multer({ dest: 'uploads' });
 const crearidentificacion = async(req,res)=>{
     try {
         const {idusuario,cliente_id,mision,vision} = req.body;
-        const guardar = await pool.query('insert into nombres_empresa(idusuario,cliente_id,mision,vision)values($1,$2,$3,$4,$5)',[
+        const guardar = await pool.query('insert into nombres_empresa(idusuario,cliente_id,mision,vision)values($1,$2,$3,$4)',[
             idusuario,
             cliente_id,
             mision,
