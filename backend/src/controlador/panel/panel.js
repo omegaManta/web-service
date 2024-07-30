@@ -150,16 +150,16 @@ const verusuario = async(req,res)=>{
 const editarusuario = async(req,res)=> {
   const idusuario = req.params.idusuario;
   const {idrol,ruc,email,
-    telefono,direccion,nombre_propietario,nombres_empresa,contacto,ciudad
+    telefono,direccion,nombre_propietario,empresa,contacto,ciudad
     ,password} = req.body;
-    const edicion = await pool.query('update usuario set idrol = $1, ruc = $2, email = $3, telefono = $4, direccion = $5, nombre_propietario = $6,nombres_empresa = $7, contacto = $8,ciudad = $9,password = $10 where idusuario = $11',[
+    const edicion = await pool.query('update usuario set idrol = $1, ruc = $2, email = $3, telefono = $4, direccion = $5, nombre_propietario = $6,empresa = $7, contacto = $8,ciudad = $9,password = $10 where idusuario = $11',[
       idrol,
       ruc,
       email,
       telefono,
       direccion,
       nombre_propietario,
-      nombres_empresa,
+      empresa,
       contacto,
       ciudad,
       password,
@@ -170,6 +170,15 @@ const editarusuario = async(req,res)=> {
  })
 }
 
+const eliminarususario = async(req,res) => {
+  const idusuario = req.params.idusuario;
+  const elimina = await pool.query('delete from usuario where idusuario = $1',[
+    idusuario
+  ])
+  res.json({
+    message: 'Usuario eliminado'
+  })
+}
 
 
 
@@ -185,6 +194,7 @@ module.exports = {
     verusuario,
     verfacturacliente,
     verclientesatecnico,
-    sumartotalpedido
+    sumartotalpedido,
+    eliminarususario
 }
 
