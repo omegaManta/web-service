@@ -25,16 +25,16 @@ const verroles = async(req,res)=>{
 
 const crearusuario = async(req,res)=>{
     const {idrol,ruc,email,
-        telefono,direccion,nombre_propietario,nombres_empresa,contacto,ciudad
+        telefono,direccion,nombre_propietario,empresa,contacto,ciudad
         ,password} = req.body;
-    const guarda = await pool.query('insert into usuario(idrol,ruc,email,telefono,direccion,nombre_propietario,nombres_empresa,contacto,ciudad,password)values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',[
+    const guarda = await pool.query('insert into usuario(idrol,ruc,email,telefono,direccion,nombre_propietario,empresa,contacto,ciudad,password)values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',[
         idrol,
         ruc,
         email,
         telefono,
         direccion,
         nombre_propietario,
-        nombres_empresa,
+        empresa,
         contacto,
         ciudad,
         password
@@ -84,7 +84,7 @@ const verperfil = async (req, res) => {
     const decoded = jwt.verify(token, 'panel omega web');
     const userId = decoded.userId;
 
-    const result = await pool.query('select c.idusuario,r.rol, c.ruc, c.email, c.nombre_propietario,c.nombres_empresa, c.telefono,c.direccion,c.ciudad from usuario c inner join rol r on r.idrol = c.idrol  where c.idusuario = $1', [userId]);
+    const result = await pool.query('select c.idusuario,r.rol, c.ruc, c.email, c.nombre_propietario,c.empresa, c.telefono,c.direccion,c.ciudad from usuario c inner join rol r on r.idrol = c.idrol  where c.idusuario = $1', [userId]);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Perfil de usuario no encontrado' });
