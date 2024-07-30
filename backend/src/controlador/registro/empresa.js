@@ -110,7 +110,7 @@ const crearSolicitud = async(req,res)=>{
   ciudad,
   password,
   idusuario,
-  nombres_empresa,
+  empresa,
   nombre_propietario
   } = req.body;
 
@@ -147,7 +147,7 @@ const crearSolicitud = async(req,res)=>{
     from: 'notificaciones@omegas-apps.com',
     to: email,
     subject: 'Cliente '+nombre_empresa+ ' por favor cambiar contraseña y no compartir sus datos con nadie',
-    text: 'Gracias por preferirnos usted ha sido añadido a la tienda '+nombres_empresa+ ' de '+nombre_propietario+ 
+    text: 'Gracias por preferirnos usted ha sido añadido a la tienda '+empresa+ ' de '+nombre_propietario+ 
     '. Inicie sesion con las siguientes credenciales correo = '+email+ ' contraseña = '+password+ 
     '. Por favor no comparta su informacion con nadie.......'
   };
