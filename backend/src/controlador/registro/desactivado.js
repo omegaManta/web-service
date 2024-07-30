@@ -24,7 +24,7 @@ const creardesactivado = async (req, res) => {
 
 
   const mostrardesactivados = async(req,res )=>{
-  const response = await pool.query('select d.idEmpresa, d.ruc, d.email, d.telefono, d.direccion, d.nombre_empresa, d.contacto, d.ciudad, d.password, d.idusuario, p.nombres_empresa from usuario p join desactivado d on p.idusuario = d.idusuario')
+  const response = await pool.query('select d.idEmpresa, d.ruc, d.email, d.telefono, d.direccion, d.nombre_empresa, d.contacto, d.ciudad, d.password, d.idusuario, p.empresa from usuario p join desactivado d on p.idusuario = d.idusuario')
   res.status(200).json(response.rows)
   }
 
@@ -44,7 +44,7 @@ const creardesactivado = async (req, res) => {
 
   const buscardesactivados = async(req,res)=>{
     const nombre_empresa = req.params.nombre_empresa
-    const response = await pool.query('select d.idEmpresa, d.ruc, d.email, d.telefono, d.direccion, d.nombre_empresa, d.contacto, d.ciudad, d.password, d.idusuario,d.fecha_ingreso, p.nombres_empresa from usuario p join desactivado d on p.idusuario = d.idusuario where d.nombre_empresa like $1',[
+    const response = await pool.query('select d.idEmpresa, d.ruc, d.email, d.telefono, d.direccion, d.nombre_empresa, d.contacto, d.ciudad, d.password, d.idusuario,d.fecha_ingreso, p.empresa from usuario p join desactivado d on p.idusuario = d.idusuario where d.nombre_empresa like $1',[
       nombre_empresa + '%'
     ])
     res.status(200).json(response.rows)
