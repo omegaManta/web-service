@@ -57,7 +57,7 @@ const mostraridentificacionunica = async(req,res)=>{
   }
 
 const mostrartodo = async(req,res)=>{
-    const response = await pool.query('select idname,mision,cliente_id,email,vision from nombres_empresa')
+    const response = await pool.query('select idname,mision,cliente_id,vision from nombres_empresa')
     res.status(200).json(response.rows);
 }
 
@@ -90,7 +90,7 @@ const crearlogo = async(req,res)=>{
 
 
 const mostrarlogos = async(req,res)=>{
-const response = await pool.query('select l.idlogo,l.logo,n.nombre, n.mision,n.vision from logo_empresa l inner join nombres_empresa n on n.idname = l.idname')
+const response = await pool.query('select l.idlogo,l.logo, n.mision,n.vision from logo_empresa l inner join nombres_empresa n on n.idname = l.idname')
 res.status(200).json(response.rows)
 }
 
