@@ -151,8 +151,31 @@ const verpanelcategorias = async(req,res)=>{
   
 
 vercategorias = async(req,res)=>{
-    const response = await pool.query('select idcategoria,idusuario,descripcion from categoria')
-    res.status(200).json(response.rows)
+    const token = req.headers.authorization;
+    
+    if (!token) {
+      res.status(401).json({ error: 'Token no proporcionado' });
+      return;
+    }
+  
+    try {
+      const decoded = jwt.verify(token, 'sistema omega web');
+      const userId = decoded.userId;
+  
+      pool.query('select c.idcategoria, c.descripcion from categoria c join usuario u on u.idusuario = c.idusuario join copia cl on u.idusuario = cli.idusuario where cl.idEmpresa = $1', [userId], (err, result) => {
+        if (err) {
+          console.error(err);
+          res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
+          return;
+        }
+  
+        const userProfile = result.rows;
+        res.json({ profile: userProfile });
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(401).json({ error: 'Token inválido' });
+    }
 }
 
 const muestracategoria = async(req,res)=>{
