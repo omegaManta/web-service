@@ -1,7 +1,8 @@
 const {buscarServicio,verServicios,crearservicio,verservicio,
     editarServicio,eliminarservicio,verinicial,
 crearcategoria,vercategorias,vercategoria,editarcategoria,
-eliminarcategoria,detalleservicio,muestracategoria,contarservicios
+eliminarcategoria,detalleservicio,muestracategoria,contarservicios,
+verpanelcategorias
 } = require('../controlador/servicio')
 const {Router} = require('express')
 const router = Router()
@@ -24,6 +25,7 @@ router.get('/',verinicial);
 //categorias
 router.post('/categorias',crearcategoria)
 router.get('/categorias',vercategorias)
+router.get('/panel-categorias',verpanelcategorias)
 router.get('/categoria/:idcategoria',vercategoria)
 router.put('/categoria/:idcategoria',editarcategoria)
 router.delete('/categoria/:idcategoria',eliminarcategoria)

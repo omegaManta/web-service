@@ -1,4 +1,5 @@
 const multer = require('multer');
+const jwt = require('jsonwebtoken');
 const cloudinary = require('cloudinary').v2;
 const {pool} = require('../db/conexion');
 
@@ -119,6 +120,36 @@ res.json({
 })
 }
 
+//ver categorias por panel de los propietarios
+const verpanelcategorias = async(req,res)=>{
+    const token = req.headers.authorization;
+    
+    if (!token) {
+      res.status(401).json({ error: 'Token no proporcionado' });
+      return;
+    }
+  
+    try {
+      const decoded = jwt.verify(token, 'panel omega web');
+      const userId = decoded.userId;
+  
+      pool.query('select c.idcategoria, c.descripcion from categoria c join usuario u on u.idusuario = c.idusuario where u.idusuario = $1', [userId], (err, result) => {
+        if (err) {
+          console.error(err);
+          res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
+          return;
+        }
+  
+        const userProfile = result.rows;
+        res.json({ profile: userProfile });
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(401).json({ error: 'Token inválido' });
+    }
+  }
+  
+
 vercategorias = async(req,res)=>{
     const response = await pool.query('select idcategoria,idusuario,descripcion from categoria')
     res.status(200).json(response.rows)
@@ -183,5 +214,6 @@ module.exports = {
     eliminarservicio,
     detalleservicio,
     contarservicios,
-    verinicial
+    verinicial,
+    verpanelcategorias
 }
