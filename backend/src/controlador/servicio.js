@@ -162,7 +162,7 @@ vercategorias = async(req,res)=>{
       const decoded = jwt.verify(token, 'sistema omega web');
       const userId = decoded.userId;
   
-      pool.query('select c.idcategoria, c.descripcion from categoria c join usuario u on u.idusuario = c.idusuario join copia cl on u.idusuario = cli.idusuario where cl.idempresa = $1', [userId], (err, result) => {
+      pool.query('select c.idcategoria, c.descripcion from categoria c join usuario u on u.idusuario = c.idusuario join copia cl on u.idusuario = cl.idusuario where cl.idempresa = $1', [userId], (err, result) => {
         if (err) {
           console.error(err);
           res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
