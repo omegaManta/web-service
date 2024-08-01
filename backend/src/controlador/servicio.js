@@ -7,16 +7,24 @@ const upload = multer({ dest: 'uploads' });
 
 //servicios
 const crearservicio = async(req,res)=>{
-const {idusuario,idcategoria,descripcion,precio} = req.body;
- const guardar = await pool.query('insert into servicio(idusuario,idcategoria,idusuario,descripcion,precio)values($1,$2,$3,$4)',[
-            idusuario,        
-            idcategoria,
-            descripcion,
-            precio
-        ])
-        res.json({
-            message: 'Servicio creado sastifactoriamente'
-        })
+        try {
+            const result = await cloudinary.uploader.upload(req.file.path,{
+                resource_type: 'auto',
+                folder: 'servicios'
+            })
+            const fotoUrl = result.secure_url;
+            const {idcategoria,descripcion,precio} = req.body;
+            const guardar = await pool.query('insert into servicio(idcategoria,foto,descripcion,precio)values($1,$2,$3,$4)',[       
+                idcategoria,
+                fotoUrl,
+                descripcion,
+                precio
+            ])
+            res.status(200).json(result)
+        } catch (error) {
+          console.error(error);
+          res.status(400).send(error.message);
+        }
 }
 
 
@@ -38,11 +46,62 @@ const detalleservicio = async(req,res)=>{
     res.status(200).json(respuesta.rows);
     }
 
+const verserviciospanel = async(req,res) => {
+    const token = req.headers.authorization;
+    
+    if (!token) {
+      res.status(401).json({ error: 'Token no proporcionado' });
+      return;
+    }
+  
+    try {
+      const decoded = jwt.verify(token, 'panel omega web');
+      const userId = decoded.userId;
+  
+      pool.query('select c.idcategoria, c.descripcion as categoria, s.descripcion,s.foto,s.precio from categoria c join usuario u on u.idusuario = c.idusuario join servicio s on c.idcategoria = s.idcategoria where u.idusuario = $1', [userId], (err, result) => {
+        if (err) {
+          console.error(err);
+          res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
+          return;
+        }
+  
+        const userProfile = result.rows;
+        res.json({ profile: userProfile });
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(401).json({ error: 'Token inválido' });
+    }
+}
 
 const verServicios = async(req,res)=>{
-const respuesta = await pool.query('select s.idservicio,s.idcategoria, s.descripcion, s.precio, s.foto, c.descripcion as categoriadescripcion from servicio s join categoria c on c.idcategoria = s.idcategoria')
-res.status(200).json(respuesta.rows);
+    const token = req.headers.authorization;
+    
+    if (!token) {
+      res.status(401).json({ error: 'Token no proporcionado' });
+      return;
+    }
+  
+    try {
+      const decoded = jwt.verify(token, 'sistema omega web');
+      const userId = decoded.userId;
+  
+      pool.query('select s.idservicio,s.idcategoria, s.descripcion, s.precio, s.foto from servicio s join categoria c on c.idcategoria = s.idcategoria join usuario u on u.idusuario = c.idusuario join copia cl on u.idusuario = cl.idusuario where cl.idempresa = $1', [userId], (err, result) => {
+        if (err) {
+          console.error(err);
+          res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
+          return;
+        }
+  
+        const userProfile = result.rows;
+        res.json({ profile: userProfile });
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(401).json({ error: 'Token inválido' });
+    }
 }
+
 
 
 
@@ -238,5 +297,6 @@ module.exports = {
     detalleservicio,
     contarservicios,
     verinicial,
-    verpanelcategorias
+    verpanelcategorias,
+    verserviciospanel
 }
