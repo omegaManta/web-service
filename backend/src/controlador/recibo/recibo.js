@@ -1,5 +1,6 @@
 const {pool} = require('../../db/conexion');
 const cron = require('node-cron');
+const jwt = require('jsonwebtoken');
 
 
 
@@ -21,8 +22,31 @@ const crearecibo = async(req,res) => {
 }
 
 const verecibos = async(req,res) => {
-    const response = await pool.query('select c.nombre_empresa,r.recibo,r.fecha_creacion from recibo r join copia c on c.idempresa = r.idempresa ');
-    res.status(200).json(response.rows);
+    const token = req.headers.authorization;
+      
+    if (!token) {
+      res.status(401).json({ error: 'Token no proporcionado' });
+      return;
+    }
+    
+    try {
+      const decoded = jwt.verify(token, 'panel omega web');
+      const userId = decoded.userId;
+    
+      pool.query('select c.nombre_empresa,r.recibo,r.fecha_creacion from recibo r join copia c on c.idempresa = r.idempresa join usuario u on u.idusuario = c.idusuario where u.idusuario = $1', [userId], (err, result) => {
+        if (err) {
+          console.error(err);
+          res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
+          return;
+        }
+    
+        const userProfile = result.rows;
+        res.json({ profile: userProfile });
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(401).json({ error: 'Token inválido' });
+    }
 }
 
 
