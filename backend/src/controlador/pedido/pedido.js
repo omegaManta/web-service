@@ -118,7 +118,7 @@ const buscartrabajorealizado = async (req, res) => {
         'FROM recibo r ' +
         'JOIN copia c ON c.idempresa = r.idempresa ' +
         'JOIN usuario u ON u.idusuario = c.idusuario ' +
-        'WHERE u.idusuario = $1 AND c.nombre_empresa LIKE $2',
+        'WHERE u.idusuario = $1 AND c.nombre_empresa ILIKE $2',
         [userId, nombreEmpresaLike],
         (err, result) => {
           if (err) {
