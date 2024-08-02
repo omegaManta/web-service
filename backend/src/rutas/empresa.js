@@ -1,5 +1,6 @@
 const {crearEnlaces,
     verEnlaces,
+    verEnlacespanel,
     verenlace,
     editarenlace,
     eliminarenlace
@@ -10,6 +11,7 @@ const router = Router()
 
 router.post('/enlaces',crearEnlaces);
 router.get('/enlaces',verEnlaces);
+router.get('/enlaces-panel',verEnlacespanel);
 router.get('/enlace/:iden',verenlace);
 router.put('/enlace/:iden',editarenlace);
 router.delete('/enlace/:iden',eliminarenlace);
