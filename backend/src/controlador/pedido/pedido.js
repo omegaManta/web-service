@@ -1,8 +1,10 @@
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
-const {pool} = require('../../db/conexion')
+const {pool} = require('../../db/conexion');
+const jwt = require('jsonwebtoken');
+const upload = multer({dest: 'uploads'});
 
-const upload = multer({dest: 'uploads'})
+
 
 //trabajos pedidos
 const crearpedido = async(req,res)=>{
@@ -97,13 +99,44 @@ const vertrabajosrealizados = async(req,res)=>{
 
 
 
-const buscartrabajorealizado = async(req,res)=>{
+const buscartrabajorealizado = async (req, res) => {
+    const token = req.headers.authorization;
     const nombre_empresa = req.params.nombre_empresa;
-    const response = await pool.query('select p.idpedido,c.ruc, c.nombre_empresa,c.contrato,p.firma, t.nombre_propietario as tecnico_escogido,t.telefono,t.ciudad,t.ruc,p.mensaje as requiere,s.descripcion as servicio, s.precio, s.duracion,p.estado,p.fecha_hora,s.foto_url,o.comentario from trabajo_realizado p join usuario t on t.idusuario = p.idusuario join servicio s on s.idservicio = p.idservicio join observacion o on p.idpedido = o.idpedido join copia c on c.idempresa = p.idempresa where c.nombre_empresa like $1 order by o.fecha_hora desc',[
-        nombre_empresa + '%'
-    ])
-    res.status(200).json(response.rows);
-}
+      
+    if (!token) {
+      res.status(401).json({ error: 'Token no proporcionado' });
+      return;
+    }
+    
+    try {
+      const decoded = jwt.verify(token, 'panel omega web');
+      const userId = decoded.userId;
+      const nombreEmpresaLike = `${nombre_empresa}%`;
+  
+      pool.query(
+        'SELECT c.nombre_empresa, r.recibo, r.fecha_creacion ' +
+        'FROM recibo r ' +
+        'JOIN copia c ON c.idempresa = r.idempresa ' +
+        'JOIN usuario u ON u.idusuario = c.idusuario ' +
+        'WHERE u.idusuario = $1 AND c.nombre_empresa LIKE $2',
+        [userId, nombreEmpresaLike],
+        (err, result) => {
+          if (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
+            return;
+          }
+  
+          const userProfile = result.rows;
+          res.json({ profile: userProfile });
+        }
+      );
+    } catch (error) {
+      console.error(error);
+      res.status(401).json({ error: 'Token inválido' });
+    }
+  };
+  
 
 
 
