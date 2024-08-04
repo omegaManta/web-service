@@ -10,12 +10,13 @@ const upload = multer({ dest: 'uploads' });
 //identificacion para la empresa
 const crearidentificacion = async(req,res)=>{
     try {
-        const {idusuario,cliente_id,mision,vision} = req.body;
-        const guardar = await pool.query('insert into nombres_empresa(idusuario,cliente_id,mision,vision)values($1,$2,$3,$4)',[
+        const {idusuario,cliente_id,mision,vision,color} = req.body;
+        const guardar = await pool.query('insert into nombres_empresa(idusuario,cliente_id,mision,vision,color)values($1,$2,$3,$4,$5)',[
             idusuario,
             cliente_id,
             mision,
-            vision
+            vision,
+            color
         ])
       res.json({
         message: 'Identificacion de empresa creada'
@@ -40,7 +41,7 @@ const mostraridentificacionunica = async(req,res)=>{
       const decoded = jwt.verify(token, 'sistema omega web');
       const userId = decoded.userId;
   
-      pool.query('select n.idname,u.empresa, l.logo from nombres_empresa n inner join logo_empresa l on n.idname = l.idname join usuario u on u.idusuario = n.idusuario join copia c on u.idusuario = c.idusuario where c.idEmpresa = $1 order by l.fecha_hora desc limit 1', [userId], (err, result) => {
+      pool.query('select n.idname,u.empresa,n.color, l.logo from nombres_empresa n inner join logo_empresa l on n.idname = l.idname join usuario u on u.idusuario = n.idusuario join copia c on u.idusuario = c.idusuario where c.idEmpresa = $1 order by l.fecha_hora desc limit 1', [userId], (err, result) => {
         if (err) {
           console.error(err);
           res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
