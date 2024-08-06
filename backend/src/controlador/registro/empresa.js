@@ -149,15 +149,15 @@ const crearSolicitud = async (req, res) => {
           <img src="${logo_email}" alt="Logo" style="max-width: 100px; border-radius: 50%;"/>
         </div>
         <div style="padding: 20px;">
-          <h2 style="color: #333;">Bienvenido a ${empresa}</h2>
-          <p>Estimado/a ${nombre_empresa},</p>
-          <p>Gracias por preferirnos. Usted ha sido añadido a la tienda <strong>${empresa}</strong> de <strong>${nombre_propietario}</strong>.</p>
-          <p>Inicie sesión con las siguientes credenciales:</p>
-          <p><strong>Correo:</strong> ${email}</p>
-          <p><strong>Contraseña:</strong> ${password}</p>
-          <p>Por favor, no comparta su información con nadie.</p>
+          <h2 style="color: ${color_fuente}">Bienvenido a ${empresa}</h2>
+          <p style="color: ${color_fuente}">Estimado/a ${nombre_empresa},</p>
+          <p style="color: ${color_fuente}">Gracias por preferirnos. Usted ha sido añadido a la tienda <strong>${empresa}</strong> de <strong>${nombre_propietario}</strong>.</p>
+          <p style="color: ${color_fuente}">Inicie sesión con las siguientes credenciales:</p>
+          <p style="color: ${color_fuente}"><strong>Correo:</strong> ${email}</p>
+          <p style="color: ${color_fuente}"><strong>Contraseña:</strong> ${password}</p>
+          <p style="color: ${color_fuente}">Por favor, no comparta su información con nadie.</p>
           <p style="text-align: center; margin-top: 20px;">
-            <a href="#" style="background-color: #4CAF50; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Iniciar Sesión</a>
+            <a href="#" style="background-color: ${color}; color: ${color_fuente}; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Iniciar Sesión</a>
           </p>
         </div>
         <div style="background-color: #f4f4f4; color: #666; padding: 10px; text-align: center;">
