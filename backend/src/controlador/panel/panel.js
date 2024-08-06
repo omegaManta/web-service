@@ -99,6 +99,32 @@ const verperfil = async (req, res) => {
 };
 
 
+const verperfilconfiguracion = async (req, res) => {
+  const token = req.headers.authorization;
+  
+  if (!token) {
+    return res.status(401).json({ error: 'Token no proporcionado' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, 'panel omega web');
+    const userId = decoded.userId;
+
+    const result = await pool.query('select n.idname,n.color,n.color_fuente,n.mision,n.vision,c.idusuario,r.rol, c.ruc, c.email, c.nombre_propietario,c.empresa, c.telefono,c.direccion,c.ciudad from usuario c inner join rol r on r.idrol = c.idrol join nombres_empresa n on c.idusuario = n.idusuario  where c.idusuario = $1', [userId]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Perfil de usuario no encontrado' });
+    }
+
+    const userProfile = result.rows[0];
+    return res.json({ profile: userProfile });
+  } catch (error) {
+    console.error(error);
+    return res.status(401).json({ error: 'Token inválido' });
+  }
+};
+
+
 
 //tecnicos
 const verpedidotecnico = async(req,res)=>{
@@ -195,6 +221,7 @@ module.exports = {
     verfacturacliente,
     verclientesatecnico,
     sumartotalpedido,
-    eliminarususario
+    eliminarususario,
+    verperfilconfiguracion
 }
 
