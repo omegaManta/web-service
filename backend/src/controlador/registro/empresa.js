@@ -144,7 +144,7 @@ const crearSolicitud = async (req, res) => {
   // Plantilla HTML para el correo electrónico
   const htmlContent = `
     <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4;;">
-      <div style="max-width: 600px; margin: auto; background-color: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+      <div style="max-width: 600px; margin: auto; background-color: ${color}"; border-radius: 10px; overflow: hidden; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
         <div style="background-color: ${color}; color: ${color_fuente}; padding: 20px; text-align: center;">
           <img src="${logo_email}" alt="Logo" style="max-width: 100px; border-radius: 50%;"/>
         </div>
