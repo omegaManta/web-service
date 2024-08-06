@@ -148,7 +148,7 @@ const crearSolicitud = async (req, res) => {
         <div style="background-color: ${color}; color: ${color_fuente}; padding: 20px; text-align: center;">
           <img src="${logo_email}" alt="Logo" style="max-width: 100px; border-radius: 50%;"/>
         </div>
-        <div style="padding: 20px;">
+        <div style="padding: 20px;background-color: ${color};">
           <h2 style="color: ${color_fuente}">Bienvenido a ${empresa}</h2>
           <p style="color: ${color_fuente}">Estimado/a ${nombre_empresa},</p>
           <p style="color: ${color_fuente}">Gracias por preferirnos. Usted ha sido añadido a la tienda <strong>${empresa}</strong> de <strong>${nombre_propietario}</strong>.</p>
