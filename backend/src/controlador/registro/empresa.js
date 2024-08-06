@@ -102,19 +102,22 @@ res.status(200).json(respuesta.rows);
 }
 
 
-const crearSolicitud = async(req,res)=>{
-  const {ruc,email,telefono,
-  direccion,
-  nombre_empresa,
-  contacto,
-  ciudad,
-  password,
-  idusuario,
-  empresa,
-  nombre_propietario
+const crearSolicitud = async (req, res) => {
+  const {
+    ruc,
+    email,
+    telefono,
+    direccion,
+    nombre_empresa,
+    contacto,
+    ciudad,
+    password,
+    idusuario,
+    empresa,
+    nombre_propietario,
+    logo_email,
   } = req.body;
 
-  
   // Configuración del transporte para NodeMailer (Hotmail/Outlook)
   const transporter = nodemailer.createTransport({
     host: "mail.omegas-apps.com",
@@ -123,57 +126,78 @@ const crearSolicitud = async(req,res)=>{
     port: 587,
     auth: {
       user: "notificaciones@omegas-apps.com",
-      pass: "N0t1f1c@c10nes*2024"
+      pass: "N0t1f1c@c10nes*2024",
     },
     tls: {
-      rejectUnauthorized: false
+      rejectUnauthorized: false,
     },
     debug: true,
     maxConnections: 100,
     maxMessages: 100,
     authMethod: 'LOGIN',
     requireTLS: true,
-    // no not send more than 5 messages in a second
-    rateLimit: 1
-    // service: 'hotmail',
-    // auth: {
-    //   user: 'omega_manta@hotmail.com',
-    //   pass: 'bebe2013',
-    // },
+    rateLimit: 1,
   });
+
+  // Plantilla HTML para el correo electrónico
+  const htmlContent = `
+    <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4;">
+      <div style="max-width: 600px; margin: auto; background-color: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        <div style="background-color: #4CAF50; color: #fff; padding: 20px; text-align: center;">
+          <img src="${logo_email}" alt="Logo" style="max-width: 100px; border-radius: 50%;"/>
+        </div>
+        <div style="padding: 20px;">
+          <h2 style="color: #333;">Bienvenido a ${empresa}</h2>
+          <p>Estimado/a ${nombre_empresa},</p>
+          <p>Gracias por preferirnos. Usted ha sido añadido a la tienda <strong>${empresa}</strong> de <strong>${nombre_propietario}</strong>.</p>
+          <p>Inicie sesión con las siguientes credenciales:</p>
+          <p><strong>Correo:</strong> ${email}</p>
+          <p><strong>Contraseña:</strong> ${password}</p>
+          <p>Por favor, no comparta su información con nadie.</p>
+          <p style="text-align: center; margin-top: 20px;">
+            <a href="#" style="background-color: #4CAF50; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Iniciar Sesión</a>
+          </p>
+        </div>
+        <div style="background-color: #f4f4f4; color: #666; padding: 10px; text-align: center;">
+          <p>© 2024 ${empresa}. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </div>
+  `;
 
   // Configuración del correo electrónico
   const mailOptions = {
     from: 'notificaciones@omegas-apps.com',
     to: email,
-    subject: 'Cliente '+nombre_empresa+ ' por favor cambiar contraseña y no compartir sus datos con nadie',
-    text: 'Gracias por preferirnos usted ha sido añadido a la tienda '+empresa+ ' de '+nombre_propietario+ 
-    '. Inicie sesion con las siguientes credenciales correo = '+email+ ' contraseña = '+password+ 
-    '. Por favor no comparta su informacion con nadie.......'
+    subject: `Cliente ${nombre_empresa}, por favor cambie su contraseña y no comparta sus datos con nadie`,
+    html: htmlContent,
   };
 
- 
-  transporter.sendMail(mailOptions, (error, info) => {
+  transporter.sendMail(mailOptions, async (error, info) => {
     if (error) {
       console.error('Error al enviar el correo:', error);
       res.status(500).json({ error: 'Error al enviar el correo' });
     } else {
       console.log('Correo enviado con éxito:', info.response);
 
-      // Guardar la empresa en la base de datos
-      const guarda = pool.query(
-        'INSERT INTO copia(ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idusuario) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
-        [ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idusuario]
-      );
+      try {
+        // Guardar la empresa en la base de datos
+        await pool.query(
+          'INSERT INTO copia(ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idusuario) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+          [ruc, email, telefono, direccion, nombre_empresa, contacto, ciudad, password, idusuario]
+        );
 
-      // Responder al cliente que todo fue exitoso
-      res.status(200).json({ success: true });
-      notificartienda(email);
+        // Responder al cliente que todo fue exitoso
+        res.status(200).json({ success: true });
+        notificartienda(email);
+      } catch (dbError) {
+        console.error('Error al guardar en la base de datos:', dbError);
+        res.status(500).json({ error: 'Error al guardar en la base de datos' });
+      }
     }
   });
-  
+};
 
-  }
 
 
 
