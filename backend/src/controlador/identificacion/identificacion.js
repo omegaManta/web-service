@@ -42,7 +42,7 @@ const mostraridentificacionunica = async(req,res)=>{
       const decoded = jwt.verify(token, 'sistema omega web');
       const userId = decoded.userId;
   
-      pool.query('select n.idname,u.empresa,n.color,n.color_fuente, l.logo from nombres_empresa n inner join logo_empresa l on n.idname = l.idname join usuario u on u.idusuario = n.idusuario join copia c on u.idusuario = c.idusuario where c.idEmpresa = $1 order by l.fecha_hora desc limit 1', [userId], (err, result) => {
+      pool.query('select n.idname,u.empresa,n.color,n.color_fuente, l.logo,le.logo as logo_email, u.email as corporativo from nombres_empresa n inner join logo_empresa l on n.idname = l.idname join usuario u on u.idusuario = n.idusuario join copia c on u.idusuario = c.idusuario join logo_empresa_email le on n.idname = le.idname where c.idEmpresa = $1 order by l.fecha_hora desc limit 1', [userId], (err, result) => {
         if (err) {
           console.error(err);
           res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
@@ -70,7 +70,7 @@ const mostraridentificacionunica = async(req,res)=>{
       const decoded = jwt.verify(token, 'panel omega web');
       const userId = decoded.userId;
   
-      pool.query('select n.idname,u.empresa,n.color,n.color_fuente,u.email, l.logo from nombres_empresa n inner join logo_empresa l on n.idname = l.idname join usuario u on u.idusuario = n.idusuario where u.idusuario = $1 order by l.fecha_hora desc limit 1', [userId], (err, result) => {
+      pool.query('select n.idname,u.empresa,n.color,n.color_fuente,u.email, l.logo,le.logo as logo_email, u.email as corporativo from nombres_empresa n inner join logo_empresa l on n.idname = l.idname join usuario u on u.idusuario = n.idusuario join logo_empresa_email le on n.idname = le.idname where u.idusuario = $1 order by l.fecha_hora desc limit 1', [userId], (err, result) => {
         if (err) {
           console.error(err);
           res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
