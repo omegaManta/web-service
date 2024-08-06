@@ -30,8 +30,31 @@ const crearanuncio = async(req,res)=>{
 
 
 const veranuncios = async(req,res)=>{
-const response = await pool.query('select idpubli,archivo,descripcion,idusuario from publicidad')
-res.status(200).json(response.rows)
+    const token = req.headers.authorization;
+        
+    if (!token) {
+      res.status(401).json({ error: 'Token no proporcionado' });
+      return;
+    }
+    
+    try {
+      const decoded = jwt.verify(token, 'panel omega web');
+      const userId = decoded.userId;
+    
+      pool.query('select p.idpubli,p.archivo,p.descripcion from publicidad p join usuario u on u.idusuario = p.idusuario  where u.idusuario = $1', [userId], (err, result) => {
+        if (err) {
+          console.error(err);
+          res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
+          return;
+        }
+    
+        const userProfile = result.rows;
+        res.json({ profile: userProfile });
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(401).json({ error: 'Token inválido' });
+    }
 }
 
 const publicidad = async(req,res)=>{
@@ -61,34 +84,7 @@ try {
   res.status(401).json({ error: 'Token inválido' });
 }
     }
-
-    const publicidadpanel = async(req,res)=>{
-        const token = req.headers.authorization;
-        
-    if (!token) {
-      res.status(401).json({ error: 'Token no proporcionado' });
-      return;
-    }
-    
-    try {
-      const decoded = jwt.verify(token, 'panel omega web');
-      const userId = decoded.userId;
-    
-      pool.query('select p.idpubli,p.archivo,p.descripcion from publicidad p join usuario u on u.idusuario = p.idusuario  where u.idusuario = $1', [userId], (err, result) => {
-        if (err) {
-          console.error(err);
-          res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
-          return;
-        }
-    
-        const userProfile = result.rows;
-        res.json({ profile: userProfile });
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(401).json({ error: 'Token inválido' });
-    }
-        }    
+ 
 
 
 const eliminaranuncio = async(req,res)=>{
