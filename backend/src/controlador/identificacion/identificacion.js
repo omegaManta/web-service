@@ -139,13 +139,12 @@ const eliminarlogo = async(req,res)=>{
 
 const editarconfiguracion = async(req,res) => {
   const idname = req.params.idname;
-  const {mision,vision,color,color_fuente,email} = req.body;
-  const editar = await pool.query('update nombres_empresa set mision  = $1, vision = $2, color = $3, color_fuente = $4, email = $5 where idname = $6',[
+  const {mision,vision,color,color_fuente} = req.body;
+  const editar = await pool.query('update nombres_empresa set mision  = $1, vision = $2, color = $3, color_fuente = $4 where idname = $5',[
     mision,
     vision,
     color,
     color_fuente,
-    email,
     idname
   ])
   json({
