@@ -29,11 +29,40 @@ const crearservicio = async(req,res)=>{
 
 
 const buscarServicio= async(req,res)=>{
+const token = req.headers.authorization;
 const descripcion = req.params.descripcion;
-const respuesta = await pool.query('select c.descripcion as categoriadescripcion,s.idservicio, s.descripcion,s.precio,s.foto, from servicio s join categoria c on c.idcategoria = s.idcategoria join imgservicio i on s.idservicio = i.idservicio where s.descripcion like $1 order by i.fecha_hora desc limit 1',[
-    descripcion + '%'
-])
-res.status(200).json(respuesta.rows);
+  
+if (!token) {
+  res.status(401).json({ error: 'Token no proporcionado' });
+  return;
+}
+
+try {
+  const decoded = jwt.verify(token, 'sistema omega web');
+  const userId = decoded.userId;
+  const nombreEmpresaLike = `${descripcion}%`;
+
+  pool.query(
+    'SELECT  c.descripcion as categoriadescripcion,s.idservicio, s.descripcion,s.precio,s.foto ' +
+    'FROM servicio s join categoria c on c.idcategoria = s.idcategoria join usuario u on u.idusuario = c.idusuario ' +
+    'join copia e on u.idusuario = e.idusuario '+
+    'WHERE c.idempresa = $1 AND s.descripcion ILIKE $2 ',
+    [userId, nombreEmpresaLike],
+    (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
+        return;
+      }
+
+      const userProfile = result.rows;
+      res.json({ profile: userProfile });
+    }
+  );
+} catch (error) {
+  console.error(error);
+  res.status(401).json({ error: 'Token inválido' });
+}
 }
 
 
