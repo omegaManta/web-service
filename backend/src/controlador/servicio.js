@@ -46,7 +46,7 @@ try {
     'SELECT  c.descripcion as categoriadescripcion,s.idservicio, s.descripcion,s.precio,s.foto ' +
     'FROM servicio s join categoria c on c.idcategoria = s.idcategoria join usuario u on u.idusuario = c.idusuario ' +
     'join copia e on u.idusuario = e.idusuario '+
-    'WHERE c.idempresa = $1 AND s.descripcion ILIKE $2 ',
+    'WHERE e.idempresa = $1 AND s.descripcion ILIKE $2 ',
     [userId, nombreEmpresaLike],
     (err, result) => {
       if (err) {
