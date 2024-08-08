@@ -69,7 +69,7 @@ try {
   const decoded = jwt.verify(token, 'sistema omega web');
   const userId = decoded.userId;
 
-  pool.query('select p.idpubli,p.archivo,p.descripcion from publicidad p join usuario u on u.idusuario = p.idusuario join copia c on u.idusuario = c.idusuario where c.idempresa = $1 order by p.fecha_hora desc limit 3', [userId], (err, result) => {
+  pool.query('select p.idpubli,p.archivo,p.descripcion from publicidad p join usuario u on u.idusuario = p.idusuario join copia c on u.idusuario = c.idusuario where c.idempresa = $1', [userId], (err, result) => {
     if (err) {
       console.error(err);
       res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
