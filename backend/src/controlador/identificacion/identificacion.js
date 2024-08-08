@@ -86,6 +86,34 @@ const mostraridentificacionunica = async(req,res)=>{
     }
   }
 
+  const mostraridentificacionunicapanelinicial = async(req,res)=>{
+    const token = req.headers.authorization;
+    
+    if (!token) {
+      res.status(401).json({ error: 'Token no proporcionado' });
+      return;
+    }
+  
+    try {
+      const decoded = jwt.verify(token, 'panel omega web');
+      const userId = decoded.userId;
+  
+      pool.query('select n.idname,u.empresa,n.color,n.color_fuente,u.email, l.logo from nombres_empresa n inner join logo_empresa l on n.idname = l.idname join usuario u on u.idusuario = n.idusuario where u.idusuario = $1 order by l.fecha_hora desc limit 1', [userId], (err, result) => {
+        if (err) {
+          console.error(err);
+          res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
+          return;
+        }
+  
+        const userProfile = result.rows[0];
+        res.json({ profile: userProfile });
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(401).json({ error: 'Token inválido' });
+    }
+  }
+
 const mostrartodo = async(req,res)=>{
     const response = await pool.query('select n.idname,n.mision,n.cliente_id,n.vision,u.empresa,u.nombre_propietario from nombres_empresa n join usuario u on u.idusuario = n.idusuario')
     res.status(200).json(response.rows);
@@ -200,5 +228,6 @@ module.exports = {
     editarconfiguracion,
     crearlogoemail,
     eliminarlogoemail,
-    mostrarlogosemail
+    mostrarlogosemail,
+    mostraridentificacionunicapanelinicial
 }

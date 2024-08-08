@@ -3,6 +3,7 @@ const router = Router()
 const {crearidentificacion,
 mostraridentificacionunica,
 mostraridentificacionunicapanel,
+mostraridentificacionunicapanelinicial,
 mostrartodo,eliminarnombre,mostrarlogos,crearlogo,eliminarlogo,
 editarconfiguracion,
 crearlogoemail,
@@ -16,6 +17,7 @@ const upload = multer({ dest: 'uploads' });
 router.post('/nombres', crearidentificacion);
 router.get('/unico',mostraridentificacionunica);
 router.get('/unico-panel',mostraridentificacionunicapanel);
+router.get('/unico-inicial',mostraridentificacionunicapanelinicial);
 router.get('/varias',mostrartodo);
 router.delete('/nombre/:idname',eliminarnombre);
 router.get('/logos',mostrarlogos)
