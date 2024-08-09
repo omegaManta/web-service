@@ -199,7 +199,7 @@ const crearlogoemail = async(req,res)=>{
 
 
 const eliminarlogoemail = async(req,res)=>{
-  const id_logo_email = req.params.idlogo;
+  const id_logo_email = req.params.id_logo_email;
   const eliminar = await pool.query('delete from logo_empresa_email where id_logo_email = $1',[
     id_logo_email
   ])
