@@ -169,9 +169,7 @@ const veridentificacion = async(req,res)=> {
   const response = await pool.query('select idname,cliente_id,mision,vision,color,color_fuente from nombres_empresa where idname = $1',[
     idname
   ])
-  json({
-    message: 'Identificaion vista'
-  })
+ res.status(200).json(response.rows);
 }
 
 
