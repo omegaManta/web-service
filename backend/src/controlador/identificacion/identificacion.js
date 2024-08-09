@@ -115,7 +115,7 @@ const mostraridentificacionunica = async(req,res)=>{
   }
 
 const mostrartodo = async(req,res)=>{
-    const response = await pool.query('select n.idname,n.mision,n.cliente_id,n.vision,u.empresa,u.nombre_propietario from nombres_empresa n join usuario u on u.idusuario = n.idusuario')
+    const response = await pool.query('select n.idname,n.mision,n.cliente_id,n.vision,u.empresa,u.nombre_propietario,n.color,n.color_fuente from nombres_empresa n join usuario u on u.idusuario = n.idusuario')
     res.status(200).json(response.rows);
 }
 
