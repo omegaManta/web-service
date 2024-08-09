@@ -185,7 +185,7 @@ const editarconfiguracion = async(req,res) => {
     cliente_id,
     idname
   ])
-  json({
+  res.json({
     message: 'Configuracion de empresa actualizada'
   })
 }
