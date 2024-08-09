@@ -166,7 +166,7 @@ const eliminarlogo = async(req,res)=>{
 
 const veridentificacion = async(req,res)=> {
   const idname = req.params.idname;
-  const response = await pool.query('select idname,cliente_id,mision,vision from nombres_empresa where idname = $1',[
+  const response = await pool.query('select idname,cliente_id,mision,vision,color,color_fuente from nombres_empresa where idname = $1',[
     idname
   ])
   json({
