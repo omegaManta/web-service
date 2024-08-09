@@ -164,15 +164,27 @@ const eliminarlogo = async(req,res)=>{
     })
     }
 
+const veridentificacion = async(req,res)=> {
+  const idname = req.params.idname;
+  const response = await pool.query('select idname,cliente_id,mision,vision from nombres_empresa where idname = $1',[
+    idname
+  ])
+  json({
+    message: 'Identificaion vista'
+  })
+}
+
+
 
 const editarconfiguracion = async(req,res) => {
   const idname = req.params.idname;
-  const {mision,vision,color,color_fuente} = req.body;
-  const editar = await pool.query('update nombres_empresa set mision  = $1, vision = $2, color = $3, color_fuente = $4 where idname = $5',[
+  const {mision,vision,color,color_fuente,cliente_id} = req.body;
+  const editar = await pool.query('update nombres_empresa set mision  = $1, vision = $2, color = $3, color_fuente = $4, cliente_id = $5 where idname = $6',[
     mision,
     vision,
     color,
     color_fuente,
+    cliente_id,
     idname
   ])
   json({
@@ -229,5 +241,6 @@ module.exports = {
     crearlogoemail,
     eliminarlogoemail,
     mostrarlogosemail,
-    mostraridentificacionunicapanelinicial
+    mostraridentificacionunicapanelinicial,
+    veridentificacion
 }
