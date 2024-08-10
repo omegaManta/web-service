@@ -276,7 +276,7 @@ const crearnotificacionpedido = async(req,res)=>{
 
 //Comprobante aceptado
 const crearnotificacioncompletado = async (req, res) => {
-  const { email, nombre_empresa, ruc, color, logo_email } = req.body;
+  const { email, nombre_empresa, ruc, color, logo } = req.body;
 
   // Configuración del transporte para NodeMailer (Hotmail/Outlook)
   const transporter = nodemailer.createTransport({
@@ -361,7 +361,7 @@ const crearnotificacioncompletado = async (req, res) => {
     <body>
       <div class="email-container">
         <div class="header" style="background-color: ${color};">
-          <img src="${logo_email}" alt="Logo de la Empresa">
+          <img src="${logo}" alt="Logo de la Empresa">
         </div>
         <div class="content">
           <p>Hola,</p>
@@ -392,7 +392,7 @@ const crearnotificacioncompletado = async (req, res) => {
 
 //Comprobante rechazado
 const crearnotificacionrechazado = async (req, res) => {
-  const { email, nombre_empresa, ruc, color, logo_email } = req.body;
+  const { email, nombre_empresa, ruc, color, logo } = req.body;
 
   // Configuración del transporte para NodeMailer (Hotmail/Outlook)
   const transporter = nodemailer.createTransport({
@@ -477,7 +477,7 @@ const crearnotificacionrechazado = async (req, res) => {
     <body>
       <div class="email-container">
         <div class="header" style="background-color: ${color};">
-          <img src="${logo_email}" alt="Logo de la Empresa">
+          <img src="${logo}" alt="Logo de la Empresa">
         </div>
         <div class="content">
           <p>Hola,</p>
