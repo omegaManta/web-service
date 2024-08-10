@@ -2,7 +2,7 @@ const {Router} = require('express');
 const router = Router();
 const {crearol,crearusuario,verroles,verusuarios,login,verperfil,verpedidovendedor,
 editarusuario,verusuario,verfacturacliente,verclientesvendedor,sumartotalpedido,
-eliminarususario,verperfilconfiguracion} = require('../../controlador/panel/panel');
+eliminarususario,verperfilconfiguracion,verperfilcorreo} = require('../../controlador/panel/panel');
 
 
 
@@ -20,6 +20,7 @@ router.get('/cliente-vendedor',verclientesvendedor);
 router.get('/sumar-total/:idempresa',sumartotalpedido);
 router.delete('/usuario/:idusuario',eliminarususario);
 router.get('/usuario-config',verperfilconfiguracion);
+router.get('/usuario-correo',verperfilcorreo);
 
 
 
