@@ -127,18 +127,38 @@ const verperfilconfiguracion = async (req, res) => {
 
 
 //tecnicos
-const verpedidotecnico = async(req,res)=>{
+const verpedidovendedor = async(req,res)=>{
   const idempresa = req.params.idempresa;
-  const response = await pool.query('select s.descripcion,count(*),sum(s.precio), c.nombre_empresa,c.telefono,c.contrato, s.precio, s.duracion,s.foto_url,p.estado from pedido p  join servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa where c.idempresa = $1 group by s.descripcion,c.nombre_empresa,c.telefono,c.contrato,s.precio,s.duracion,s.foto_url,p.estado',[
+  const response = await pool.query('select s.descripcion,count(*),sum(s.precio), c.nombre_empresa,c.telefono, s.precio, s.foto,p.estado from pedido p  join servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa where c.idempresa = $1 group by s.descripcion,c.nombre_empresa,c.telefono,s.precio,s.foto,p.estado',[
     idempresa
   ]);
   res.status(200).json(response.rows);
 }
 
 
-const verclientesatecnico = async(req,res)=>{
-  const response = await pool.query('select c.idempresa,c.nombre_empresa from pedido p join servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa group by c.idempresa,c.nombre_empresa');
-    res.status(200).json(response.rows);
+const verclientesvendedor = async(req,res)=>{
+    const token = req.headers.authorization;
+  
+    if (!token) {
+      return res.status(401).json({ error: 'Token no proporcionado' });
+    }
+  
+    try {
+      const decoded = jwt.verify(token, 'panel omega web');
+      const userId = decoded.userId;
+  
+      const result = await pool.query('select c.idempresa,c.nombre_empresa from pedido p join servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa join usuario u on u.idusuario = c.idusuario where u.idusuario = $1 group by c.idempresa,c.nombre_empresa', [userId]);
+  
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Perfil de usuario no encontrado' });
+      }
+  
+      const userProfile = result.rows;
+      return res.json({ profile: userProfile });
+    } catch (error) {
+      console.error(error);
+      return res.status(401).json({ error: 'Token inválido' });
+    }
 }
 
 //clientes
@@ -215,11 +235,11 @@ module.exports = {
     verusuarios,
     login,
     verperfil,
-    verpedidotecnico,
+    verpedidovendedor,
     editarusuario,
     verusuario,
     verfacturacliente,
-    verclientesatecnico,
+    verclientesvendedor,
     sumartotalpedido,
     eliminarususario,
     verperfilconfiguracion
