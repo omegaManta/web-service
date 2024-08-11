@@ -198,7 +198,7 @@ const verfacturacliente = async(req,res) => {
 
 const sumartotalpedido = async(req,res)=>{
   const idempresa = req.params.idempresa;
-  const response = await pool.query('select sum(s.precio) from pedido p join servicio s on s.idservicio = p.idservicio where p.idempresa = $1',[
+  const response = await pool.query('select sum(s.precio2) from pedido p join servicio s on s.idservicio = p.idservicio where p.idempresa = $1',[
     idempresa
   ]);
   res.status(200).json(response.rows);
