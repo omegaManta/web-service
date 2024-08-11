@@ -14,11 +14,12 @@ const crearservicio = async(req,res)=>{
             })
             const fotoUrl = result.secure_url;
             const {idcategoria,descripcion,precio} = req.body;
+            const transaccion = precio + 0.85;
             const guardar = await pool.query('insert into servicio(idcategoria,foto,descripcion,precio)values($1,$2,$3,$4)',[       
                 idcategoria,
                 fotoUrl,
                 descripcion,
-                precio
+                transaccion
             ])
             res.status(200).json(result)
         } catch (error) {
