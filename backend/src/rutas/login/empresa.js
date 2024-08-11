@@ -2,7 +2,8 @@ const {Router} = require('express')
 const router = Router()
 const {crearLogin,verperfil,verperfilpedidos,
 verperfiltrabajosrealizados,verperfilcomentario,
-verperfildetalleobservacion,verperfilvisitas,contarpedidos,contarcompletados,sumarpedidoscliente,verecibosclientes,
+verperfildetalleobservacion,verperfilvisitas,contarpedidos,contarcompletados,sumarpedidoscliente,
+sumarpedidosclientecomprobante,verecibosclientes,
 verecibo
 } = require('../../controlador/login/empresa')
 const jwt = require('jsonwebtoken');
@@ -16,7 +17,8 @@ router.get('/detalle-observacion/:idpedido',verperfildetalleobservacion);
 router.get('/visitas',verperfilvisitas);  
 router.get('/conteo-pedido',contarpedidos);  
 router.get('/conteo-completado',contarcompletados);  
-router.get('/total-pedido',sumarpedidoscliente);  
+router.get('/total-pedido',sumarpedidoscliente); 
+router.get('/total-pedido-comprobante',sumarpedidosclientecomprobante);  
 router.get('/recibo-cliente',verecibosclientes);  
 router.get('/recibo',verecibo);
 

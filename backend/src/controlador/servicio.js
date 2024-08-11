@@ -19,11 +19,13 @@ const crearservicio = async(req,res)=>{
             var op2 = op1 / 100;
             var op3 = op2 + 0.30;
             var transaccion = op3 + precioinicial;
-            const guardar = await pool.query('insert into servicio(idcategoria,foto,descripcion,precio)values($1,$2,$3,$4)',[       
+            var precio2 = precioinicial;
+            const guardar = await pool.query('insert into servicio(idcategoria,foto,descripcion,precio,precio2)values($1,$2,$3,$4,$5)',[       
                 idcategoria,
                 fotoUrl,
                 descripcion,
-                transaccion
+                transaccion,
+                precio2
             ])
             res.status(200).json(result)
         } catch (error) {
