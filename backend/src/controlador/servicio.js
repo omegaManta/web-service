@@ -14,10 +14,10 @@ const crearservicio = async(req,res)=>{
             })
             const fotoUrl = result.secure_url;
             const {idcategoria,descripcion,precio} = req.body;
-            const op1 = precio * 2.9;
-            const op2 = op1/100;
-            const op3 = op2 + 0.30;
-            const transaccion = op3 + precio;
+            var op1 = precio * 2.9;
+            var op2 = op1/100;
+            var op3 = op2 + 0.30;
+            var transaccion = op3 + precio;
             const guardar = await pool.query('insert into servicio(idcategoria,foto,descripcion,precio)values($1,$2,$3,$4)',[       
                 idcategoria,
                 fotoUrl,
