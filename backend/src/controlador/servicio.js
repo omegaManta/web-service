@@ -22,7 +22,7 @@ const crearservicio = async(req,res)=>{
             var op2 = op1 / 100;
             var gananciatotal = precioinicial / op2;
             var redondeoganancia = Number(gananciatotal.toFixed(2));
-            var gananciaproducto = gananciatotal - precioinicial;
+            var gananciaproducto = redondeoganancia - precioinicial;
 
             //Comison de pasarela de pago
             var op4 = redondeoganancia * 2.9;
