@@ -21,21 +21,23 @@ const crearservicio = async(req,res)=>{
             var op1 = 100 - gananciainicial ;
             var op2 = op1 / 100;
             var gananciatotal = precioinicial / op2;
+            var redondeoganancia = Number(gananciatotal.toFixed(2));
             var gananciaproducto = gananciatotal - precioinicial;
 
             //Comison de pasarela de pago
-            var op4 = gananciatotal * 2.9;
+            var op4 = redondeoganancia * 2.9;
             var op5 = op4 / 100;
             var op6 = op5 + 0.30;
-            var transaccion = op6 + gananciatotal;
+            var transaccion = op6 + redondeoganancia;
+            var redondeotransaccion = Number(transaccion.toFixed(2));
             var precio2 = gananciatotal;
             const guardar = await pool.query('insert into servicio(idcategoria,foto,descripcion,ganancia,gananciaunitaria,precio,precio2)values($1,$2,$3,$4,$5,$6,$7)',[       
                 idcategoria,
                 fotoUrl,
                 descripcion,
-                gananciatotal,
+                redondeoganancia,
                 gananciaproducto,
-                transaccion,
+                redondeotransaccion,
                 precio2
             ])
             res.status(200).json(result)
