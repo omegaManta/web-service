@@ -30,7 +30,7 @@ const crearservicio = async(req,res)=>{
             var op6 = op5 + 0.30;
             var transaccion = op6 + redondeoganancia;
             var redondeotransaccion = Number(transaccion.toFixed(2));
-            var precio2 = gananciatotal;
+            var precio2 = redondeoganancia;
             const guardar = await pool.query('insert into servicio(idcategoria,foto,descripcion,ganancia,gananciaunitaria,precio,precio2)values($1,$2,$3,$4,$5,$6,$7)',[       
                 idcategoria,
                 fotoUrl,
