@@ -17,7 +17,7 @@ const crearservicio = async(req,res)=>{
             //conversion para programar los datos
             const comisioninicial = parseFloat(comision);
             const precioinicial = parseFloat(precio);
-            //Comison de pasarela de pago
+            //comision de pasarela de pago
             var op1 = precioinicial * comisioninicial;
             var op2 = op1 / 100;
             var op3 = op2 + 0.30;
@@ -99,7 +99,7 @@ const verserviciospanel = async(req,res) => {
       const decoded = jwt.verify(token, 'panel omega web');
       const userId = decoded.userId;
   
-      pool.query('select s.idservicio, c.idcategoria, c.descripcion as categoria, s.descripcion,s.foto,s.precio,s.precio2,s.ganancia,s.gananciaunitaria from categoria c join usuario u on u.idusuario = c.idusuario join servicio s on c.idcategoria = s.idcategoria where u.idusuario = $1', [userId], (err, result) => {
+      pool.query('select s.idservicio, c.idcategoria, c.descripcion as categoria, s.descripcion,s.foto,s.precio,s.precio2 from categoria c join usuario u on u.idusuario = c.idusuario join servicio s on c.idcategoria = s.idcategoria where u.idusuario = $1', [userId], (err, result) => {
         if (err) {
           console.error(err);
           res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
