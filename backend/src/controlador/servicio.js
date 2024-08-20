@@ -13,31 +13,23 @@ const crearservicio = async(req,res)=>{
                 folder: 'servicios'
             })
             const fotoUrl = result.secure_url;
-            const {idcategoria,descripcion,ganancia,precio} = req.body;
+            const {idcategoria,descripcion,comision,precio} = req.body;
             //conversion para programar los datos
-            const gananciainicial = parseFloat(ganancia);
+            const comisioninicial = parseFloat(comision);
             const precioinicial = parseFloat(precio);
-            //ganancia por producto
-            var op1 = 100 - gananciainicial ;
-            var op2 = op1 / 100;
-            var gananciatotal = precioinicial / op2;
-            var redondeoganancia = Number(gananciatotal.toFixed(2));
-            var gananciaproducto = redondeoganancia - precioinicial;
-
             //Comison de pasarela de pago
-            var op4 = redondeoganancia * 2.9;
-            var op5 = op4 / 100;
-            var op6 = op5 + 0.30;
-            var transaccion = op6 + redondeoganancia;
-            var redondeotransaccion = Number(transaccion.toFixed(2));
-            var precio2 = redondeoganancia;
-            const guardar = await pool.query('insert into servicio(idcategoria,foto,descripcion,ganancia,gananciaunitaria,precio,precio2)values($1,$2,$3,$4,$5,$6,$7)',[       
+            var op1 = precioinicial * comisioninicial;
+            var op2 = op1 / 100;
+            var op3 = op2 + 0.30;
+            var comisiontotal = op3 + precioinicial;
+            //pasar valor a precio sin tarjeta
+            var precio2 = precioinicial;
+            const guardar = await pool.query('insert into servicio(idcategoria,foto,descripcion,comision,precio,precio2)values($1,$2,$3,$4,$5,$6)',[       
                 idcategoria,
                 fotoUrl,
                 descripcion,
-                redondeoganancia,
-                gananciaproducto,
-                redondeotransaccion,
+                comision,
+                comisiontotal,
                 precio2
             ])
             res.status(200).json(result)
