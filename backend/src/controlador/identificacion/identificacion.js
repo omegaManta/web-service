@@ -116,7 +116,7 @@ const mostraridentificacionunica = async(req,res)=>{
   }
 
 const mostrartodo = async(req,res)=>{
-    const response = await pool.query('select n.idname,n.mision,n.cliente_id,n.vision,u.empresa,u.nombre_propietario,n.color,n.color_fuente from nombres_empresa n join usuario u on u.idusuario = n.idusuario')
+    const response = await pool.query('select n.idname,n.mision,n.cliente_id,n.vision,u.empresa,u.nombre_propietario,n.color,n.color_fuente,n.tipo_empresa from nombres_empresa n join usuario u on u.idusuario = n.idusuario')
     res.status(200).json(response.rows);
 }
 
@@ -167,7 +167,7 @@ const eliminarlogo = async(req,res)=>{
 
 const veridentificacion = async(req,res)=> {
   const idname = req.params.idname;
-  const response = await pool.query('select idname,cliente_id,mision,vision,color,color_fuente from nombres_empresa where idname = $1',[
+  const response = await pool.query('select idname,cliente_id,mision,vision,color,color_fuente,tipo_empresa from nombres_empresa where idname = $1',[
     idname
   ])
  res.status(200).json(response.rows);
@@ -177,13 +177,14 @@ const veridentificacion = async(req,res)=> {
 
 const editarconfiguracion = async(req,res) => {
   const idname = req.params.idname;
-  const {mision,vision,color,color_fuente,cliente_id} = req.body;
-  const editar = await pool.query('update nombres_empresa set mision  = $1, vision = $2, color = $3, color_fuente = $4, cliente_id = $5 where idname = $6',[
+  const {mision,vision,color,color_fuente,cliente_id,tipo_empresa} = req.body;
+  const editar = await pool.query('update nombres_empresa set mision  = $1, vision = $2, color = $3, color_fuente = $4, cliente_id = $5, tipo_empresa = $6 where idname = $7',[
     mision,
     vision,
     color,
     color_fuente,
     cliente_id,
+    tipo_empresa,
     idname
   ])
   res.json({
