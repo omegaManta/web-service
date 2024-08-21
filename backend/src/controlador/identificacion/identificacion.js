@@ -10,14 +10,15 @@ const upload = multer({ dest: 'uploads' });
 //identificacion para la empresa
 const crearidentificacion = async(req,res)=>{
     try {
-        const {idusuario,cliente_id,mision,vision,color,color_fuente} = req.body;
-        const guardar = await pool.query('insert into nombres_empresa(idusuario,cliente_id,mision,vision,color,color_fuente)values($1,$2,$3,$4,$5,$6)',[
+        const {idusuario,cliente_id,mision,vision,color,color_fuente,tipo_empresa} = req.body;
+        const guardar = await pool.query('insert into nombres_empresa(idusuario,cliente_id,mision,vision,color,color_fuente,tipo_empresa)values($1,$2,$3,$4,$5,$6,$7)',[
             idusuario,
             cliente_id,
             mision,
             vision,
             color,
-            color_fuente
+            color_fuente,
+            tipo_empresa
         ])
       res.json({
         message: 'Identificacion de empresa creada'
@@ -42,7 +43,7 @@ const mostraridentificacionunica = async(req,res)=>{
       const decoded = jwt.verify(token, 'sistema omega web');
       const userId = decoded.userId;
   
-      pool.query('select n.idname,u.empresa,n.color,n.color_fuente,n.mision,n.vision, l.logo,le.logo as logo_email, u.email as corporativo from nombres_empresa n inner join logo_empresa l on n.idname = l.idname join usuario u on u.idusuario = n.idusuario join copia c on u.idusuario = c.idusuario join logo_empresa_email le on n.idname = le.idname where c.idEmpresa = $1 order by le.fecha_hora desc limit 1', [userId], (err, result) => {
+      pool.query('select n.idname,u.empresa,n.color,n.color_fuente,n.mision,n.vision,n.tipo_empresa, l.logo,le.logo as logo_email, u.email as corporativo from nombres_empresa n inner join logo_empresa l on n.idname = l.idname join usuario u on u.idusuario = n.idusuario join copia c on u.idusuario = c.idusuario join logo_empresa_email le on n.idname = le.idname where c.idEmpresa = $1 order by le.fecha_hora desc limit 1', [userId], (err, result) => {
         if (err) {
           console.error(err);
           res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
@@ -70,7 +71,7 @@ const mostraridentificacionunica = async(req,res)=>{
       const decoded = jwt.verify(token, 'panel omega web');
       const userId = decoded.userId;
   
-      pool.query('select n.idname,u.empresa,n.color,n.color_fuente,u.email, l.logo,le.logo as logo_email, u.email as corporativo from nombres_empresa n inner join logo_empresa l on n.idname = l.idname join usuario u on u.idusuario = n.idusuario join logo_empresa_email le on n.idname = le.idname where u.idusuario = $1 order by l.fecha_hora desc limit 1', [userId], (err, result) => {
+      pool.query('select n.idname,u.empresa,n.color,n.color_fuente,n.tipo_empresa,u.email, l.logo,le.logo as logo_email, u.email as corporativo from nombres_empresa n inner join logo_empresa l on n.idname = l.idname join usuario u on u.idusuario = n.idusuario join logo_empresa_email le on n.idname = le.idname where u.idusuario = $1 order by l.fecha_hora desc limit 1', [userId], (err, result) => {
         if (err) {
           console.error(err);
           res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
