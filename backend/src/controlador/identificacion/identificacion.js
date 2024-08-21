@@ -99,7 +99,7 @@ const mostraridentificacionunica = async(req,res)=>{
       const decoded = jwt.verify(token, 'panel omega web');
       const userId = decoded.userId;
   
-      pool.query('select n.idname,u.empresa,n.color,n.color_fuente,u.email, l.logo from nombres_empresa n inner join logo_empresa l on n.idname = l.idname join usuario u on u.idusuario = n.idusuario where u.idusuario = $1 order by l.fecha_hora desc limit 1', [userId], (err, result) => {
+      pool.query('select n.idname,u.empresa,n.color,n.color_fuente,u.email, l.logo,n.tipo_empresa from nombres_empresa n inner join logo_empresa l on n.idname = l.idname join usuario u on u.idusuario = n.idusuario where u.idusuario = $1 order by l.fecha_hora desc limit 1', [userId], (err, result) => {
         if (err) {
           console.error(err);
           res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
