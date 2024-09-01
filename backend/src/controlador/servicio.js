@@ -14,7 +14,7 @@ const crearservicio = async(req,res)=>{
             })
             const fotoUrl = result.secure_url;
             const {idcategoria,descripcion,comision,precio,
-              duracion,disponibilidad 
+              duracion,stock
             } = req.body;
             //conversion para programar los datos
             const comisioninicial = parseFloat(comision);
@@ -26,7 +26,7 @@ const crearservicio = async(req,res)=>{
             var comisiontotal = op3 + precioinicial;
             //pasar valor a precio sin tarjeta
             var precio2 = precioinicial;
-            const guardar = await pool.query('insert into servicio(idcategoria,foto,descripcion,comision,precio,precio2,duracion,disponibilidad)values($1,$2,$3,$4,$5,$6,$7,$8)',[       
+            const guardar = await pool.query('insert into servicio(idcategoria,foto,descripcion,comision,precio,precio2,duracion,stock)values($1,$2,$3,$4,$5,$6,$7,$8)',[       
                 idcategoria,
                 fotoUrl,
                 descripcion,
@@ -34,7 +34,7 @@ const crearservicio = async(req,res)=>{
                 comisiontotal,
                 precio2,
                 duracion,
-                disponibilidad
+                stock
             ])
             res.status(200).json(result)
         } catch (error) {
