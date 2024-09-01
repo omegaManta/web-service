@@ -59,7 +59,7 @@ try {
   const nombreEmpresaLike = `${descripcion}%`;
 
   pool.query(
-    'SELECT  c.descripcion as categoriadescripcion,s.idservicio, s.descripcion,s.precio,s.foto,s.precio2,s.duracion,s.disponibilidad  ' +
+    'SELECT  c.descripcion as categoriadescripcion,s.idservicio, s.descripcion,s.precio,s.foto,s.precio2,s.duracion,s.stock  ' +
     'FROM servicio s join categoria c on c.idcategoria = s.idcategoria join usuario u on u.idusuario = c.idusuario ' +
     'join copia e on u.idusuario = e.idusuario '+
     'WHERE e.idempresa = $1 AND s.descripcion ILIKE $2 ',
@@ -85,7 +85,7 @@ try {
 
 const detalleservicio = async(req,res)=>{
     const idservicio = req.params.idservicio;
-    const respuesta = await pool.query('select c.idcategoria, c.descripcion as categoriadescripcion,s.idservicio, s.descripcion,s.precio,s.precio2,s.foto,t.video,s.duracion,s.disponibilidad  from servicio s join categoria c on c.idcategoria = s.idcategoria join tutorial t on s.idservicio = t.idservicio where s.idservicio = $1 order by t.fecha_hora desc limit 1',[
+    const respuesta = await pool.query('select c.idcategoria, c.descripcion as categoriadescripcion,s.idservicio, s.descripcion,s.precio,s.precio2,s.foto,t.video,s.duracion,s.stock  from servicio s join categoria c on c.idcategoria = s.idcategoria join tutorial t on s.idservicio = t.idservicio where s.idservicio = $1 order by t.fecha_hora desc limit 1',[
         idservicio
     ])
     res.status(200).json(respuesta.rows);
@@ -103,7 +103,7 @@ const verserviciospanel = async(req,res) => {
       const decoded = jwt.verify(token, 'panel omega web');
       const userId = decoded.userId;
   
-      pool.query('select s.idservicio, c.idcategoria, c.descripcion as categoria, s.descripcion,s.foto,s.precio,s.precio2,s.comision,s.duracion,s.disponibilidad from categoria c join usuario u on u.idusuario = c.idusuario join servicio s on c.idcategoria = s.idcategoria where u.idusuario = $1', [userId], (err, result) => {
+      pool.query('select s.idservicio, c.idcategoria, c.descripcion as categoria, s.descripcion,s.foto,s.precio,s.precio2,s.comision,s.duracion,s.stock from categoria c join usuario u on u.idusuario = c.idusuario join servicio s on c.idcategoria = s.idcategoria where u.idusuario = $1', [userId], (err, result) => {
         if (err) {
           console.error(err);
           res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
@@ -131,7 +131,7 @@ const verServicios = async(req,res)=>{
       const decoded = jwt.verify(token, 'sistema omega web');
       const userId = decoded.userId;
   
-      pool.query('select s.idservicio,s.idcategoria, s.descripcion, s.precio,s.precio2, s.foto,s.duracion,s.disponibilidad from servicio s join categoria c on c.idcategoria = s.idcategoria join usuario u on u.idusuario = c.idusuario join copia cl on u.idusuario = cl.idusuario where cl.idempresa = $1', [userId], (err, result) => {
+      pool.query('select s.idservicio,s.idcategoria, s.descripcion, s.precio,s.precio2, s.foto,s.duracion,s.stock from servicio s join categoria c on c.idcategoria = s.idcategoria join usuario u on u.idusuario = c.idusuario join copia cl on u.idusuario = cl.idusuario where cl.idempresa = $1', [userId], (err, result) => {
         if (err) {
           console.error(err);
           res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
@@ -157,7 +157,7 @@ const verinicial = async(req,res)=>{
 
 const verservicio = async(req,res)=>{
 const idservicio = req.params.idservicio
-const response = await pool.query('select s.idservicio, s.idcategoria,s.descripcion,s.precio,s.foto,s.duracion,s.disponibilidad  from servicio where idservicio = $1',[
+const response = await pool.query('select s.idservicio, s.idcategoria,s.descripcion,s.precio,s.foto,s.duracion,s.stock  from servicio where idservicio = $1',[
     idservicio
 ])
 res.status(200).json(response.rows)
