@@ -170,6 +170,21 @@ const visita = async(req,res)=>{
 }
 
 
+const updatecantidadprecio = async(req,res) => {
+    const idservicio = req.params.idservicio;
+    const {precio,cantidad} = req.body;
+    var qty = parseInt(cantidad);
+    var nuevoprecio = precio * qty;
+    const update = await pool.query('update servicio set precio = $1 where idservicio = $2',[
+      nuevoprecio,
+      idservicio
+      ])
+      res.json({
+        message: 'Producto actualizado sastifactoriamente'
+      })
+}
+
+
 module.exports = {
     crearpedido,
     verpedidos,
@@ -182,5 +197,6 @@ module.exports = {
     crearvisita,
     visitas,
     visita,
-    eliminarpedir
+    eliminarpedir,
+    updatecantidadprecio
 }
