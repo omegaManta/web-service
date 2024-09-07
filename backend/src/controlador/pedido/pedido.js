@@ -182,6 +182,13 @@ const updatecantidadprecio = async(req,res) => {
       res.json({
         message: 'Producto actualizado sastifactoriamente'
       })
+      const update2 = await pool.query('update pedido set cantidad = $1 where idservicio = $2',[
+        qty,
+        idservicio
+        ])
+        res.json({
+          message: 'Producto actualizado sastifactoriamente'
+        }) 
 }
 
 
