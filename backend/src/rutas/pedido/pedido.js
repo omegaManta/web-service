@@ -5,7 +5,7 @@ eliminarpedido,
 creartrabajorealizado,
 vertrabajosrealizados,
 buscartrabajorealizado,
-verpedido,crearvisita,visitas,visita,eliminarpedir
+verpedido,crearvisita,visitas,visita,eliminarpedir,updatecantidadprecio
 } = require('../../controlador/pedido/pedido')
 const router = Router()
 
@@ -16,6 +16,7 @@ router.get('/pedido/:idpedido',verpedido);
 router.get('/solicitud-pedido/:nombres',solicitudpedidos);
 router.delete('/pedido/:idempresa',eliminarpedido);
 router.delete('/pedir/:idpedido',eliminarpedir);
+router.put('/agrega-carrito/:idservicio',updatecantidadprecio);
 const multer = require('multer');
 const upload = multer({ dest: 'uploads' });
 
