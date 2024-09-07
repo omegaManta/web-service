@@ -175,7 +175,7 @@ const updatecantidadprecio = async(req,res) => {
     const {precio,cantidad} = req.body;
     var qty = parseInt(cantidad);
     var nuevoprecio = precio * qty;
-    const update = await pool.query('update servicio set precio = $1 where idservicio = $2',[
+    const update = await pool.query('update pedido set total = $1 where idservicio = $2',[
       nuevoprecio,
       idservicio
       ])
