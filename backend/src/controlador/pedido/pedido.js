@@ -8,11 +8,12 @@ const upload = multer({dest: 'uploads'});
 
 //trabajos pedidos
 const crearpedido = async(req,res)=>{
-    const {idempresa,idservicio} = req.body;
-    const guardar = await pool.query('insert into pedido(idempresa,idservicio)values($1,$2)',
+    const {idempresa,idservicio,cantidad} = req.body;
+    const guardar = await pool.query('insert into pedido(idempresa,idservicio,cantidad)values($1,$2,$3)',
     [
         idempresa,
-        idservicio
+        idservicio,
+        cantidad
     ])
     res.json({
         message: 'Pedido creado sastifactoriamente',
