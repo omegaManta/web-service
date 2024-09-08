@@ -8,12 +8,11 @@ const upload = multer({dest: 'uploads'});
 
 //trabajos pedidos
 const crearpedido = async(req,res)=>{
-    const {idempresa,idservicio,cantidad} = req.body;
-    const guardar = await pool.query('insert into pedido(idempresa,idservicio,cantidad)values($1,$2,$3)',
+    const {idempresa,idservicio} = req.body;
+    const guardar = await pool.query('insert into pedido(idempresa,idservicio)values($1,$2)',
     [
         idempresa,
-        idservicio,
-        cantidad
+        idservicio
     ])
     res.json({
         message: 'Pedido creado sastifactoriamente',
@@ -170,27 +169,6 @@ const visita = async(req,res)=>{
 }
 
 
-const updatecantidadprecio = async(req,res) => {
-    const idservicio = req.params.idservicio;
-    const {precio,cantidad} = req.body;
-    var qty = parseInt(cantidad);
-    var nuevoprecio = precio * qty;
-    const update = await pool.query('update pedido set total = $1 where idservicio = $2',[
-      nuevoprecio,
-      idservicio
-      ])
-      res.json({
-        message: 'Producto actualizado sastifactoriamente'
-      })
-      const update2 = await pool.query('update pedido set cantidad = $1 where idservicio = $2',[
-        qty,
-        idservicio
-        ])
-        res.json({
-          message: 'Producto actualizado sastifactoriamente'
-        }) 
-}
-
 
 module.exports = {
     crearpedido,
@@ -204,6 +182,5 @@ module.exports = {
     crearvisita,
     visitas,
     visita,
-    eliminarpedir,
-    updatecantidadprecio
+    eliminarpedir
 }
