@@ -326,7 +326,7 @@ res.json({
 }
 
 
-descuentoporcategoria = async(req,res) => {
+const descuentoporcategoria = async(req,res) => {
   const idcategoria = req.params.idcategoria;
   const {valor} = req.body;
   var descuento = parseFloat(valor);
@@ -354,5 +354,6 @@ module.exports = {
     contarservicios,
     verinicial,
     verpanelcategorias,
-    verserviciospanel
+    verserviciospanel,
+    descuentoporcategoria
 }

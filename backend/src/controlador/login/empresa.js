@@ -71,6 +71,7 @@ const verperfilpedidos = async (req, res) => {
       WITH ranked_pedidos AS (
         SELECT 
           p.idpedido,
+          COUNT(*) OVER (PARTITION BY p.idservicio) AS cantidad_pedidos,
           p.idservicio,
           s.descripcion,
           c.nombre_empresa,
