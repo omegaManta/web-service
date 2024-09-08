@@ -55,7 +55,7 @@ const verperfil = async(req,res)=>{
 
 
 
-const verperfilpedidos = async(req,res)=>{
+const verperfilpedidos = async (req, res) => {
   const token = req.headers.authorization;
   
   if (!token) {
@@ -67,7 +67,40 @@ const verperfilpedidos = async(req,res)=>{
     const decoded = jwt.verify(token, 'sistema omega web');
     const userId = decoded.userId;
 
-    pool.query('select count(*),p.idpedido,p.idservicio,s.descripcion, c.nombre_empresa,c.telefono, s.precio,s.precio2,s.foto,p.estado from pedido p join  servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa where c.idempresa = $1 group by p.idpedido,p.idservicio,s.descripcion,c.nombre_empresa,c.telefono,s.precio,s.precio2,s.foto,p.estado order by p.idservicio desc limit 1 ', [userId], (err, result) => {
+    const query = `
+      WITH ranked_pedidos AS (
+        SELECT 
+          p.idpedido,
+          p.idservicio,
+          s.descripcion,
+          c.nombre_empresa,
+          c.telefono,
+          s.precio,
+          s.precio2,
+          s.foto,
+          p.estado,
+          ROW_NUMBER() OVER (PARTITION BY p.idservicio ORDER BY p.idpedido DESC) AS rn
+        FROM pedido p
+        JOIN servicio s ON s.idservicio = p.idservicio
+        JOIN copia c ON c.idempresa = p.idempresa
+        WHERE c.idempresa = $1
+      )
+      SELECT 
+        idpedido,
+        idservicio,
+        descripcion,
+        nombre_empresa,
+        telefono,
+        precio,
+        precio2,
+        foto,
+        estado
+      FROM ranked_pedidos
+      WHERE rn = 1
+      ORDER BY idservicio DESC;
+    `;
+
+    pool.query(query, [userId], (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
@@ -81,7 +114,8 @@ const verperfilpedidos = async(req,res)=>{
     console.error(error);
     res.status(401).json({ error: 'Token inválido' });
   }
-}
+};
+
 
 
 const verperfiltrabajosrealizados = async(req,res)=>{
