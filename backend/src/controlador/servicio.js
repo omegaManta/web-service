@@ -326,6 +326,17 @@ res.json({
 }
 
 
+descuentoporcategoria = async(req,res) => {
+  const idcategoria = req.params.idcategoria;
+  const {valor} = req.body;
+  var descuento = parseFloat(valor);
+  const descontar = await pool.query('update servicio SET precio = precio - (precio * $1 / 100) where idcategoria = $2',[
+    descuento,
+    idcategoria
+  ])
+}
+
+
 module.exports = {
     buscarServicio,
     verServicios,

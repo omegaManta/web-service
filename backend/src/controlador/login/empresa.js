@@ -67,7 +67,7 @@ const verperfilpedidos = async(req,res)=>{
     const decoded = jwt.verify(token, 'sistema omega web');
     const userId = decoded.userId;
 
-    pool.query('select p.idpedido,p.idservicio,s.descripcion, c.nombre_empresa,c.telefono, s.precio,s.precio2,s.foto,p.estado from pedido p join  servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa where c.idempresa = $1 group by p.idpedido,p.idservicio,s.descripcion,c.nombre_empresa,c.telefono,s.precio,s.precio2,s.foto,p.estado', [userId], (err, result) => {
+    pool.query('select count(*),p.idpedido,p.idservicio,s.descripcion, c.nombre_empresa,c.telefono, s.precio,s.precio2,s.foto,p.estado from pedido p join  servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa where c.idempresa = $1 group by p.idpedido,p.idservicio,s.descripcion,c.nombre_empresa,c.telefono,s.precio,s.precio2,s.foto,p.estado order by p.idservicio desc limit 1 ', [userId], (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
