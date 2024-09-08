@@ -57,7 +57,7 @@ const verperfil = async(req,res)=>{
 
 const verperfilpedidos = async (req, res) => {
   const token = req.headers.authorization;
-  
+
   if (!token) {
     res.status(401).json({ error: 'Token no proporcionado' });
     return;
@@ -68,10 +68,11 @@ const verperfilpedidos = async (req, res) => {
     const userId = decoded.userId;
 
     const query = `
-      WITH ranked_pedidos AS (
+      SELECT * FROM (
         SELECT 
-          p.idpedido,
+          ROW_NUMBER() OVER (PARTITION BY p.idservicio ORDER BY p.idservicio DESC) AS fila_numero,
           COUNT(*) OVER (PARTITION BY p.idservicio) AS cantidad_pedidos,
+          p.idpedido,
           p.idservicio,
           s.descripcion,
           c.nombre_empresa,
@@ -79,25 +80,13 @@ const verperfilpedidos = async (req, res) => {
           s.precio,
           s.precio2,
           s.foto,
-          p.estado,
-          ROW_NUMBER() OVER (PARTITION BY p.idservicio ORDER BY p.idpedido DESC) AS rn
+          p.estado
         FROM pedido p
         JOIN servicio s ON s.idservicio = p.idservicio
         JOIN copia c ON c.idempresa = p.idempresa
         WHERE c.idempresa = $1
-      )
-      SELECT 
-        idpedido,
-        idservicio,
-        descripcion,
-        nombre_empresa,
-        telefono,
-        precio,
-        precio2,
-        foto,
-        estado
-      FROM ranked_pedidos
-      WHERE rn = 1
+      ) subconsulta
+      WHERE fila_numero = 1
       ORDER BY idservicio DESC;
     `;
 
@@ -116,6 +105,7 @@ const verperfilpedidos = async (req, res) => {
     res.status(401).json({ error: 'Token inválido' });
   }
 };
+
 
 
 
