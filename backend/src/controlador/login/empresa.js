@@ -359,7 +359,7 @@ const verecibosclientes = async(req,res)=>{
     const decoded = jwt.verify(token, 'sistema omega web');
     const userId = decoded.userId;
 
-    pool.query('select c.nombre_empresa,r.recibo,c.idempresa,r.fecha_creacion from recibo r join copia c on c.idempresa = r.idempresa where c.idempresa = $1 order by r.fecha_creacion desc', [userId], (err, result) => {
+    pool.query('select c.nombre_empresa,r.recibo,c.idempresa,r.fecha_creacion,r.descripcion,r.precio from recibo r join copia c on c.idempresa = r.idempresa where c.idempresa = $1 order by r.fecha_creacion desc', [userId], (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
