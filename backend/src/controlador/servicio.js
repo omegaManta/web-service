@@ -24,15 +24,17 @@ const crearservicio = async(req,res)=>{
             var op2 = op1 / 100;
             var op3 = op2 + 0.30;
             var comisiontotal = op3 + precioinicial;
+            var comisiontotalRedondeado = parseFloat(comisiontotal.toFixed(2));
             //pasar valor a precio sin tarjeta
             var precio2 = precioinicial;
+            var precio2Redondeado = parseFloat(precio2.toFixed(2));
             const guardar = await pool.query('insert into servicio(idcategoria,foto,descripcion,comision,precio,precio2,duracion,stock)values($1,$2,$3,$4,$5,$6,$7,$8)',[       
                 idcategoria,
                 fotoUrl,
                 descripcion,
                 comision,
-                comisiontotal,
-                precio2,
+                comisiontotalRedondeado,
+                precio2Redondeado,
                 duracion,
                 stock
             ])
