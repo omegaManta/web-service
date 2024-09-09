@@ -25,9 +25,15 @@ const crearservicio = async (req, res) => {
       const op3 = op2 + 0.30; // Comisión fija adicional
       const comisiontotal = precioinicial + op3; // Total con comisión
 
-      // Redondeo a 2 decimales
-      const comisiontotalRedondeado = parseFloat(comisiontotal.toFixed(2));
-      const precio2Redondeado = parseFloat(precioinicial.toFixed(2));
+      // Formateo a 2 decimales usando Intl.NumberFormat
+      const formatter = new Intl.NumberFormat('en-US', {
+          style: 'decimal',
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+      });
+
+      const comisiontotalFormateado = parseFloat(formatter.format(comisiontotal));
+      const precio2Formateado = parseFloat(formatter.format(precioinicial));
 
       // Guardar en la base de datos
       const guardar = await pool.query(
@@ -37,8 +43,8 @@ const crearservicio = async (req, res) => {
               fotoUrl,
               descripcion,
               comisioninicial,
-              comisiontotalRedondeado,
-              precio2Redondeado,
+              comisiontotalFormateado,
+              precio2Formateado,
               duracion,
               stock
           ]
@@ -50,6 +56,7 @@ const crearservicio = async (req, res) => {
       res.status(400).send(error.message);
   }
 };
+
 
 
 
