@@ -6,44 +6,51 @@ const {pool} = require('../db/conexion');
 const upload = multer({ dest: 'uploads' });
 
 //servicios
-const crearservicio = async(req,res)=>{
-        try {
-            const result = await cloudinary.uploader.upload(req.file.path,{
-                resource_type: 'auto',
-                folder: 'servicios'
-            })
-            const fotoUrl = result.secure_url;
-            const {idcategoria,descripcion,comision,precio,
-              duracion,stock
-            } = req.body;
-            //conversion para programar los datos
-            const comisioninicial = parseFloat(comision);
-            const precioinicial = parseFloat(precio);
-            //comision de pasarela de pago
-            var op1 = precioinicial * comisioninicial;
-            var op2 = op1 / 100;
-            var op3 = op2 + 0.30;
-            var comisiontotal = op3 + precioinicial;
-            var comisiontotalRedondeado = parseFloat(comisiontotal.toFixed(2));
-            //pasar valor a precio sin tarjeta
-            var precio2 = precioinicial;
-            var precio2Redondeado = parseFloat(precio2.toFixed(2));
-            const guardar = await pool.query('insert into servicio(idcategoria,foto,descripcion,comision,precio,precio2,duracion,stock)values($1,$2,$3,$4,$5,$6,$7,$8)',[       
-                idcategoria,
-                fotoUrl,
-                descripcion,
-                comision,
-                comisiontotalRedondeado,
-                precio2Redondeado,
-                duracion,
-                stock
-            ])
-            res.status(200).json(result)
-        } catch (error) {
-          console.error(error);
-          res.status(400).send(error.message);
-        }
-}
+const crearservicio = async (req, res) => {
+  try {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+          resource_type: 'auto',
+          folder: 'servicios'
+      });
+      const fotoUrl = result.secure_url;
+      const { idcategoria, descripcion, comision, precio, duracion, stock } = req.body;
+
+      // Conversión para programar los datos
+      const comisioninicial = parseFloat(comision);
+      const precioinicial = parseFloat(precio);
+
+      // Comisión de pasarela de pago
+      const op1 = precioinicial * comisioninicial; // Comisión en base a porcentaje
+      const op2 = op1 / 100; // Porcentaje aplicado
+      const op3 = op2 + 0.30; // Comisión fija adicional
+      const comisiontotal = precioinicial + op3; // Total con comisión
+
+      // Redondeo a 2 decimales
+      const comisiontotalRedondeado = parseFloat(comisiontotal.toFixed(2));
+      const precio2Redondeado = parseFloat(precioinicial.toFixed(2));
+
+      // Guardar en la base de datos
+      const guardar = await pool.query(
+          'INSERT INTO servicio(idcategoria, foto, descripcion, comision, precio, precio2, duracion, stock) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
+          [
+              idcategoria,
+              fotoUrl,
+              descripcion,
+              comisioninicial,
+              comisiontotalRedondeado,
+              precio2Redondeado,
+              duracion,
+              stock
+          ]
+      );
+
+      res.status(200).json(result);
+  } catch (error) {
+      console.error(error);
+      res.status(400).send(error.message);
+  }
+};
+
 
 
 const buscarServicio= async(req,res)=>{
