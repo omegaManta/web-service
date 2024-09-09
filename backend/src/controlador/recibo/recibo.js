@@ -7,8 +7,8 @@ const jwt = require('jsonwebtoken');
 
 const crearecibo = async(req,res) => {
     try {
-        const { idempresa, recibo, precio } = req.body;
-        await pool.query('INSERT INTO recibo (idempresa, recibo,precio) VALUES ($1, $2,$3)', [idempresa, recibo, precio]);
+        const { idempresa, recibo, descripcion,precio } = req.body;
+        await pool.query('INSERT INTO recibo (idempresa, recibo,descripcion,precio) VALUES ($1, $2,$3,$4)', [idempresa, recibo, descripcion,precio]);
         res.json({
             message: 'Recibo guardado satisfactoriamente'
         });
