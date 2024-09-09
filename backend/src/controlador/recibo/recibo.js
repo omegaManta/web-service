@@ -12,7 +12,6 @@ const crearecibo = async(req,res) => {
         res.json({
             message: 'Recibo guardado satisfactoriamente'
         });
-        eliminarRecibosAntiguos();
     } catch (error) {
         console.error('Error al guardar el recibo:', error);
         res.status(500).json({
@@ -48,19 +47,6 @@ const verecibos = async(req,res) => {
       res.status(401).json({ error: 'Token inválido' });
     }
 }
-
-
-async function eliminarRecibosAntiguos() {
-    const client = await pool.connect();
-    try {
-      await client.query('SELECT eliminar_recibos()');
-      console.log('Cada registro de recibos se eliminara despues de 24 horas creado');
-    } catch (error) {
-      console.error('Error al eliminar recibos antiguos:', error);
-    } finally {
-      client.release();
-    }
-  }
   
 
 
