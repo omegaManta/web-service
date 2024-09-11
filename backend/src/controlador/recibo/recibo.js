@@ -7,8 +7,8 @@ const jwt = require('jsonwebtoken');
 
 const crearecibo = async(req,res) => {
     try {
-        const { idempresa, recibo, descripcion,precio } = req.body;
-        await pool.query('INSERT INTO recibo (idempresa, recibo,descripcion,precio) VALUES ($1, $2,$3,$4)', [idempresa, recibo, descripcion,precio]);
+        const { idempresa, descripcion,precio } = req.body;
+        await pool.query('INSERT INTO recibo (idempresa,descripcion,precio) VALUES ($1,$2,$3)', [idempresa, descripcion,precio]);
         res.json({
             message: 'Recibo guardado satisfactoriamente'
         });
@@ -32,7 +32,7 @@ const verecibos = async(req,res) => {
       const decoded = jwt.verify(token, 'panel omega web');
       const userId = decoded.userId;
     
-      pool.query('select c.nombre_empresa,r.recibo,r.fecha_creacion,r.precio,r.descripcion from recibo r join copia c on c.idempresa = r.idempresa join usuario u on u.idusuario = c.idusuario where u.idusuario = $1', [userId], (err, result) => {
+      pool.query('select c.nombre_empresa,r.fecha_creacion,r.precio,r.descripcion from recibo r join copia c on c.idempresa = r.idempresa join usuario u on u.idusuario = c.idusuario where u.idusuario = $1', [userId], (err, result) => {
         if (err) {
           console.error(err);
           res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
