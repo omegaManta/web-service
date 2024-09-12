@@ -5,7 +5,7 @@ const {crearecibo,verecibos,verecibosbytotal} = require('../../controlador/recib
 
 router.post('/recibo',crearecibo);
 router.get('/recibos',verecibos);
-router.get('/recibos-fecha',verecibosbytotal);
+router.get('/recibos-total',verecibosbytotal);
 
 
 module.exports = router;
