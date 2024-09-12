@@ -50,7 +50,7 @@ const verecibos = async(req,res) => {
   
 
 //consulta de recibos para graficas
-const verecibosbyfecha = async(req,res) => {
+const verecibosbytotal = async(req,res) => {
   const token = req.headers.authorization;
     
   if (!token) {
@@ -82,5 +82,5 @@ const verecibosbyfecha = async(req,res) => {
 module.exports = {
     crearecibo,
     verecibos,
-    verecibosbyfecha
+    verecibosbytotal
 }
