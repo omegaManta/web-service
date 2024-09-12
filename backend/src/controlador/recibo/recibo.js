@@ -62,7 +62,7 @@ const verecibosbyfecha = async(req,res) => {
     const decoded = jwt.verify(token, 'panel omega web');
     const userId = decoded.userId;
   
-    pool.query('select c.nombre_empresa,r.fecha_creacion,r.descripcion from recibo r join copia c on c.idempresa = r.idempresa join usuario u on u.idusuario = c.idusuario where u.idusuario = $1 group by c.nombre_empresa,r.fecha_creacion,r.descripcion', [userId], (err, result) => {
+    pool.query('select c.nombre_empresa,sum(precio) from recibo r join copia c on c.idempresa = r.idempresa join usuario u on u.idusuario = c.idusuario where u.idusuario = $1 group by c.nombre_empresa', [userId], (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
