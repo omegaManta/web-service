@@ -136,6 +136,9 @@ const eliminarnombre = async(req,res)=>{
 const crearlogo = async(req,res)=>{
     const result = await cloudinary.uploader.upload(req.file.path,{
         resource_type: 'auto',
+    eager: [
+      { width: 300, height: 300, crop: "pad", audio_codec: "none" }, 
+      { width: 160, height: 100, crop: "crop", gravity: "south", audio_codec: "none" } ],
         folder: 'empresas'
     })
     const logoUrl = result.secure_url;
