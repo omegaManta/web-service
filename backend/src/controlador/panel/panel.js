@@ -110,7 +110,7 @@ const verperfilconfiguracion = async (req, res) => {
     const decoded = jwt.verify(token, 'panel omega web');
     const userId = decoded.userId;
 
-    const result = await pool.query('select n.idname,n.color,n.color_fuente,n.mision,n.vision,n.cliente_id,c.idusuario,r.rol, c.ruc, c.email, c.nombre_propietario,c.empresa, c.telefono,c.direccion,c.ciudad from usuario c inner join rol r on r.idrol = c.idrol join nombres_empresa n on c.idusuario = n.idusuario  where c.idusuario = $1', [userId]);
+    const result = await pool.query('select n.idname,n.color,n.color_fuente,n.mision,n.vision,n.cliente_id,n.tipo_empresa,c.idusuario,r.rol, c.ruc, c.email, c.nombre_propietario,c.empresa, c.telefono,c.direccion,c.ciudad from usuario c inner join rol r on r.idrol = c.idrol join nombres_empresa n on c.idusuario = n.idusuario  where c.idusuario = $1', [userId]);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Perfil de usuario no encontrado' });
