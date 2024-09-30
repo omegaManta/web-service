@@ -13,7 +13,7 @@ const router = Router()
 router.post('/pedido',crearpedido);
 router.get('/pedidos',verpedidos);
 router.get('/pedido/:idpedido',verpedido);
-router.get('/solicitud-pedido/:nombres',solicitudpedidos);
+router.get('/solicitud-pedido/:nombre_empresa',solicitudpedidos);
 router.delete('/pedido/:idempresa',eliminarpedido);
 router.delete('/pedir/:idpedido',eliminarpedir);
 const multer = require('multer');

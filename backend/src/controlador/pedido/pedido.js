@@ -39,11 +39,36 @@ const verpedido = async(req,res)=>{
 
 
 const solicitudpedidos = async(req,res)=>{
-const nombres = req.params.nombres;
-const response = await pool.query('select p.idpedido,c.idempresa,c.ruc, c.nombre_empresa,c.email as correo,c.telefono as celular,s.descripcion as servicio, s.precio, s.foto,s.idservicio,p.estado,p.fecha_hora from pedido p join servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa where nombres like $1',[
-    nombres + '%'
-])
-res.status(200).json(response.rows);
+    const token = req.headers.authorization;
+    const nombre_empresa = req.params.nombre_empresa;
+      
+    if (!token) {
+      res.status(401).json({ error: 'Token no proporcionado' });
+      return;
+    }
+    
+    try {
+      const decoded = jwt.verify(token, 'panel omega web');
+      const userId = decoded.userId;
+      const nombreEmpresaLike = `${nombre_empresa}%`;
+  
+      pool.query('select p.idpedido,c.idempresa,c.ruc, c.nombre_empresa,c.email as correo,c.telefono as celular,s.descripcion as servicio, s.precio, s.foto,s.idservicio,p.estado,p.fecha_hora from pedido p join servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa join usuario u on u.idusurio = c.idusuario WHERE u.idusuario = $1 AND c.nombre_empresa ILIKE $2',
+        [userId, nombreEmpresaLike],
+        (err, result) => {
+          if (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
+            return;
+          }
+  
+          const userProfile = result.rows;
+          res.json({ profile: userProfile });
+        }
+      );
+    } catch (error) {
+      console.error(error);
+      res.status(401).json({ error: 'Token inválido' });
+    }
 }
 
 
