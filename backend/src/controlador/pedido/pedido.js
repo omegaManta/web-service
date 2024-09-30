@@ -114,7 +114,7 @@ const buscartrabajorealizado = async (req, res) => {
       const nombreEmpresaLike = `${nombre_empresa}%`;
   
       pool.query(
-        'SELECT c.nombre_empresa, r.recibo, r.fecha_creacion ' +
+        'SELECT c.nombre_empresa, r.descripcion,r.precio, r.fecha_creacion ' +
         'FROM recibo r ' +
         'JOIN copia c ON c.idempresa = r.idempresa ' +
         'JOIN usuario u ON u.idusuario = c.idusuario ' +
