@@ -366,7 +366,7 @@ const crearnotificacioncompletado = async (req, res) => {
         <div class="content">
           <p>Hola,</p>
           <p>Se ha generado un recibo para el cliente <strong>${nombre_empresa}</strong> con RUC <strong>${ruc}</strong>.</p>
-          <p>Por favor, revise su perfil en la aplicación web para descargar su recibo y presentarlo en su tienda.</p>
+          <p>Por favor, revise su seccion de recibos en la tienda virtual y presentelo en su tienda.</p>
         </div>
         <div class="footer">
           <p>Este es un correo electrónico generado automáticamente. Por favor, no responda a este mensaje.</p>
