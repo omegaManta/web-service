@@ -52,7 +52,7 @@ const solicitudpedidos = async(req,res)=>{
       const userId = decoded.userId;
       const nombreEmpresaLike = `${nombre_empresa}%`;
   
-      pool.query('select p.idpedido,c.idempresa,c.ruc, c.nombre_empresa,c.email as correo,c.telefono as celular,s.descripcion as servicio, s.precio, s.foto,s.idservicio,p.estado,p.fecha_hora from pedido p join servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa join usuario u on u.idusurio = c.idusuario WHERE u.idusuario = $1 AND c.nombre_empresa ILIKE $2',
+      pool.query('select p.idpedido,c.idempresa,c.ruc, c.nombre_empresa,c.email as correo,c.telefono as celular,s.descripcion as servicio, s.precio, s.foto,s.idservicio,p.estado,p.fecha_hora from pedido p join servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa join usuario u on u.idusuario = c.idusuario WHERE u.idusuario = $1 AND c.nombre_empresa ILIKE $2',
         [userId, nombreEmpresaLike],
         (err, result) => {
           if (err) {

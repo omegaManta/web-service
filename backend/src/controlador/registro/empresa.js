@@ -119,7 +119,7 @@ const crearSolicitud = async (req, res) => {
     color,
     color_fuente
   } = req.body;
-
+  const dominio = 'https://tienda-gamma-orpin.vercel.app/';
   // Configuración del transporte para NodeMailer (Hotmail/Outlook)
   const transporter = nodemailer.createTransport({
     host: "mail.omegas-apps.com",
@@ -157,7 +157,7 @@ const crearSolicitud = async (req, res) => {
           <p style="color: ${color_fuente}"><strong>Contraseña:</strong> ${password}</p>
           <p style="color: ${color_fuente}">Por favor, no comparta su información con nadie.</p>
           <p style="text-align: center; margin-top: 20px;">
-            <a href="#" style="background-color: ${color}; color: ${color_fuente}; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Iniciar Sesión</a>
+            <a href="${dominio}" style="background-color: ${color}; color: ${color_fuente}; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Iniciar Sesión</a>
           </p>
         </div>
         <div style="background-color: #f4f4f4; color: #666; padding: 10px; text-align: center;">
