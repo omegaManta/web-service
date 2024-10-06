@@ -154,7 +154,7 @@ const verperfilcorreo = async (req, res) => {
 //tecnicos
 const verpedidovendedor = async(req,res)=>{
   const idempresa = req.params.idempresa;
-  const response = await pool.query('select s.descripcion,count(*),sum(s.precio2), c.nombre_empresa,c.telefono, s.precio2, s.foto,p.estado from pedido p  join servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa where c.idempresa = $1 group by s.descripcion,c.nombre_empresa,c.telefono,s.precio2,s.foto,p.estado',[
+  const response = await pool.query('select s.descripcion,count(*),sum(s.precio), c.nombre_empresa,c.telefono, s.precio2, s.foto,p.estado from pedido p  join servicio s on s.idservicio = p.idservicio join copia c on c.idempresa = p.idempresa where c.idempresa = $1 group by s.descripcion,c.nombre_empresa,c.telefono,s.precio2,s.foto,p.estado',[
     idempresa
   ]);
   res.status(200).json(response.rows);
@@ -198,7 +198,7 @@ const verfacturacliente = async(req,res) => {
 
 const sumartotalpedido = async(req,res)=>{
   const idempresa = req.params.idempresa;
-  const response = await pool.query('select sum(s.precio2) from pedido p join servicio s on s.idservicio = p.idservicio where p.idempresa = $1',[
+  const response = await pool.query('select sum(s.precio) from pedido p join servicio s on s.idservicio = p.idservicio where p.idempresa = $1',[
     idempresa
   ]);
   res.status(200).json(response.rows);

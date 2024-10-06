@@ -328,7 +328,7 @@ const sumarpedidosclientecomprobante = async(req,res)=>{
     const decoded = jwt.verify(token, 'sistema omega web');
     const userId = decoded.userId;
 
-    pool.query('select sum(s.precio2) as valor from pedido p join servicio s on s.idservicio = p.idservicio  where p.idempresa = $1', [userId], (err, result) => {
+    pool.query('select sum(s.precio) as valor from pedido p join servicio s on s.idservicio = p.idservicio  where p.idempresa = $1', [userId], (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
